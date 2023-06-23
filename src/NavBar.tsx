@@ -5,7 +5,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = props => {
-    
+
     const renderCartIncicator = (): JSX.Element | null => {
         if(props.cartCount && props.cartCount !== 0) {
             return (
@@ -17,6 +17,7 @@ const NavBar: React.FC<NavBarProps> = props => {
     return (
         <div className="navbar bg-gray-100">
             <div className="navbar-start">
+                {/* mobile */}
                 <div className="dropdown">
                 <label tabIndex={0} className="btn btn-ghost lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
@@ -43,6 +44,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                     GiT
                 </a>
             </div>
+            {/* desktop */}
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 text-xl justify-around">
                 <li><a>Strona Główna</a></li>
@@ -62,7 +64,6 @@ const NavBar: React.FC<NavBarProps> = props => {
             <div className="navbar-end">
                 <a className="btn">
                     Koszyk
-
                         <div className="indicator">
                             <HiOutlineShoppingCart className="w-5 h-5"/>
                             {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
