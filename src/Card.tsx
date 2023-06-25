@@ -18,7 +18,7 @@ const Card: React.FC<CardProps> = ({header, img, desc, price, isNew}) => {
     return (
         <div className="card w-80 bg-gray-100 m-auto mt-10 shadow-xl">
             <figure>
-                <img className="max-h-60" src={img} alt="Shoes" />
+                <img draggable={false} className="max-h-60" src={img} alt="Shoes" />
             </figure>
             <div className="card-body">
                 <h2 className="card-title">

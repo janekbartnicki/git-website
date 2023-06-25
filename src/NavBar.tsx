@@ -15,14 +15,14 @@ const NavBar: React.FC<NavBarProps> = props => {
     }
 
     return (
-        <div className="navbar bg-gray-100">
+        <div className="navbar z-10 sticky top-0 glass bg-gray-100 shadow-lg">
             <div className="navbar-start">
                 {/* mobile */}
                 <div className="dropdown">
                 <label tabIndex={0} className="btn btn-ghost lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                 </label>
-                <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-30">
+                <ul tabIndex={0} className="menu z-10 menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-30">
                     <li><a>Strona Główna</a></li>
                     <li><a>Sklep</a></li>
                     {/* <li>
