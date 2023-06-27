@@ -4,9 +4,10 @@ interface CardProps {
     desc?: string;
     price: string;
     isNew?: boolean;
+    link?: string;
 }
 
-const Card: React.FC<CardProps> = ({header, img, desc, price, isNew}) => {
+const Card: React.FC<CardProps> = ({header, img, desc, price, isNew, link = '#'}) => {
 
     const renderBadge = (): JSX.Element | null => {
         if(isNew) {
@@ -14,9 +15,9 @@ const Card: React.FC<CardProps> = ({header, img, desc, price, isNew}) => {
         } else return null;
     }
 
-    //TODO: przerobić wartości na wariat dla urządzeń mobilnych oraz poprawić responsywność
+    //TODO: przerobić wartości na wariat dla urządzeń mobilnych oraz poprawić responsywność oraz react-router
     return (
-        <div className="card w-80 bg-gray-100 m-auto mt-10 shadow-xl">
+        <a href={link} className="card w-80 bg-gray-100 m-auto mt-10 shadow-xl">
             <figure>
                 <img draggable={false} className="max-h-60" src={img} alt="Shoes" />
             </figure>
@@ -30,7 +31,7 @@ const Card: React.FC<CardProps> = ({header, img, desc, price, isNew}) => {
                     <button className="btn bg-[#e83b3b] text-white hover:text-black ">KUP {price} PLN</button>
                 </div>
             </div>
-        </div>
+        </a>
     )
 }
 

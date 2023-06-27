@@ -1,17 +1,22 @@
 import './index.css';
 import Home from './Home';
-import Footer from './Footer';
-import NavBar from './NavBar';
 import Shop from './Shop';
+import ProductDetails from './ProductDetails';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import RootLayout from './RootLayout';
+import ErrorBoundary from './ErrorBoundary';
+
+const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path='/' element={<RootLayout/>} errorElement={<ErrorBoundary/>}>
+        <Route index element={<Home/>}/>
+        <Route path='/sklep' element={<Shop/>}/>
+      </Route>
+  )
+)
 
 const App = () => {
-  return (
-    <>
-      <NavBar cartCount={1}/>
-      <Shop/>
-      <Footer/>
-    </>
-  )
+  return <RouterProvider router={router}/>
 }
 
 export default App;
