@@ -5,9 +5,9 @@ import Footer from './Footer';
 const RootLayout: React.FC = () => {
     return (
         <>
-            <NavBar />
-            <Outlet />
-            <Footer />
+            <NavBar/>
+            <Outlet/>
+            <Footer/>
         </>
     )
 }

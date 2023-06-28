@@ -1,13 +1,16 @@
+import { Link } from 'react-router-dom';
+
 interface CardProps {
     header: string;
     img: string;
     desc?: string;
-    price: string;
+    price: number;
     isNew?: boolean;
     link?: string;
+    altImg: string;
 }
 
-const Card: React.FC<CardProps> = ({header, img, desc, price, isNew, link = '#'}) => {
+const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, price, isNew, altImg, link = '#'}) => {
 
     const renderBadge = (): JSX.Element | null => {
         if(isNew) {
@@ -17,9 +20,9 @@ const Card: React.FC<CardProps> = ({header, img, desc, price, isNew, link = '#'}
 
     //TODO: przerobić wartości na wariat dla urządzeń mobilnych oraz poprawić responsywność oraz react-router
     return (
-        <a href={link} className="card w-80 bg-gray-100 m-auto mt-10 shadow-xl">
+        <Link to={link} className="card w-80 bg-gray-100 m-auto mt-10 shadow-xl">
             <figure>
-                <img draggable={false} className="max-h-60" src={img} alt="Shoes" />
+                <img draggable={false} className="max-h-60" src={img} alt={altImg} />
             </figure>
             <div className="card-body">
                 <h2 className="card-title">
@@ -31,7 +34,7 @@ const Card: React.FC<CardProps> = ({header, img, desc, price, isNew, link = '#'}
                     <button className="btn bg-[#e83b3b] text-white hover:text-black ">KUP {price} PLN</button>
                 </div>
             </div>
-        </a>
+        </Link>
     )
 }
 

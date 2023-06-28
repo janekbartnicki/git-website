@@ -1,0 +1,61 @@
+{
+    "products": [
+        {
+            "id": 1,
+            "name": "GiT Red Blue",
+            "model": "Argo Negative",
+            "spec": {
+                "cut": "Negative Cut, Hybrid Cut",
+                "foam": "4 mm",
+                "latex": "Latex Germany",
+                "sizes": [8, 9, 10]
+            },
+            "price": 0,
+            "mainImg": "/images/marcin_fec.png",
+            "photos": "",
+            "isNew": 1
+        },
+        {
+            "id": 2,
+            "name": "GiT Silver",
+            "model": "Negative Cut Finger Save",
+            "spec": {
+                "foam": "4 mm",
+                "latex": "Latex Germany",
+                "sizes": [7, 9, 10]
+            },
+            "price": 0,
+            "mainImg": "",
+            "photos": "",
+            "isNew": 0
+        },
+        {
+            "id": 3,
+            "name": "GiT Green",
+            "model": "Negative Cut Finger Save",
+            "spec": {
+                "foam": "4 mm",
+                "latex": "Latex Germany",
+                "sizes": [7, 9, 10]
+            },
+            "price": 0,
+            "mainImg": "",
+            "photos": "",
+            "isNew": 0
+        },
+        {
+            "id": 4,
+            "name": "GiT Gold",
+            "model": "Negative Cut",
+            "spec": {
+                "foam": "4.5 mm",
+                "latex": "Latex Germany",
+                "sizes": [8, 9, 10]
+            },
+            "price": 0,
+            "mainImg": "",
+            "photos": "",
+            "isNew": 0
+        }
+    ]
+}
