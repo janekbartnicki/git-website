@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useWindowScroll } from '@mantine/hooks';
+import { useEffect } from 'react';
 import Card from "./Card";
 
 export interface Product {
@@ -63,3 +65,16 @@ export const fetchProducts = async (): Promise<Product[]> => {
         throw new Error('Failed to fetch data.');
     }
 };
+
+
+export const AutoScroll: React.FC = () => {
+    const [scroll, scrollTo] = useWindowScroll();
+    const location = window.location.href;
+
+    useEffect(() => {
+        scrollTo({ y: 0 });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location]);
+
+    return null;
+}

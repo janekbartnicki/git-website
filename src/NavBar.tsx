@@ -1,5 +1,6 @@
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { AutoScroll } from './utils';
 
 interface NavBarProps {
     cartCount?: number;
@@ -17,6 +18,7 @@ const NavBar: React.FC<NavBarProps> = props => {
 
     return (
         <div className="navbar z-10 sticky top-0 glass bg-gray-100 shadow-lg">
+            <AutoScroll/>
             <div className="navbar-start">
                 {/* mobile */}
                 <div className="dropdown">
