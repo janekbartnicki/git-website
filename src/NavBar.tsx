@@ -1,6 +1,7 @@
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { AutoScroll } from './utils';
+import { useRef } from 'react';
 
 interface NavBarProps {
     cartCount?: number;
@@ -16,27 +17,34 @@ const NavBar: React.FC<NavBarProps> = props => {
         } else return null;
     }
 
+    // const dropdownRef = useRef<HTMLUListElement | null>(null);
+
+    // // const hideDropdown = () => {
+    // //     // naprawić
+    // //     dropdownRef.current?.setAttribute('class', 'hidden');
+    // // }
+
     return (
         <div className="navbar z-10 sticky top-0 glass bg-gray-100 shadow-lg">
             <AutoScroll/>
             <div className="navbar-start">
                 {/* mobile */}
                 <div className="dropdown">
-                <label tabIndex={0} className="btn btn-ghost lg:hidden">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-                </label>
-                <ul tabIndex={0} className="menu z-10 menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-30">
-                    <li><Link to='/'>Strona Główna</Link></li>
-                    <li><Link to='/sklep'>Sklep</Link></li>
-                    {/* <li>
-                    <a>Parent</a>
-                    <ul className="p-2">
-                        <li><a>Submenu 1</a></li>
-                        <li><a>Submenu 2</a></li>
+                    <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+                    </label>
+                    <ul tabIndex={0} className="menu z-10 menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-30">
+                        <li><Link to='/'>Strona Główna</Link></li>
+                        <li><Link to='/sklep'>Sklep</Link></li>
+                        {/* <li>
+                        <a>Parent</a>
+                        <ul className="p-2">
+                            <li><a>Submenu 1</a></li>
+                            <li><a>Submenu 2</a></li>
+                        </ul>
+                        </li> */}
+                        <li><a>O nas</a></li>
                     </ul>
-                    </li> */}
-                    <li><a>O nas</a></li>
-                </ul>
                 </div>
                 <Link to='/' className="btn btn-ghost normal-case text-2xl">
                     <img 

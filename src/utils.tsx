@@ -71,7 +71,7 @@ export const AutoScroll: React.FC = () => {
     const [scroll, scrollTo] = useWindowScroll();
     const location = window.location.href;
 
-    useEffect(() => {
+    useEffect((): void => {
         scrollTo({ y: 0 });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);

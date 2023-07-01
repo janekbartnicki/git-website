@@ -1,6 +1,10 @@
 import { useEffect , useState} from 'react';
 import { useParams } from "react-router";
 import { Product, fetchProducts } from './utils';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+import { GrPrevious, GrNext } from 'react-icons/gr';
+
 
 const ProductDetails: React.FC = () => {
     const {id} = useParams();
@@ -18,31 +22,30 @@ const ProductDetails: React.FC = () => {
     }, [])
 
     return (
-        <>
-            <div className='w-56'>
-                <div className="carousel w-56 m-20">
-                    <div id="item1" className="carousel-item w-56 h-56">
-                        <img src="/images/icon_logo.png" className="w-full" />
-                    </div> 
-                    <div id="item2" className="carousel-item  w-56 h-56">
-                        <img src="/images/icon_logo.png" className="w-full" />
-                    </div> 
-                    <div id="item3" className="carousel-item w-56 h-56">
-                        <img src="/images/icon_logo.png" className="w-full" />
-                    </div> 
-                    <div id="item4" className="carousel-item w-56 h-56">
-                        <img src="/images/icon_logo.png" className="w-full" />
+        <div className='flex flex-row flex-wrap justify-center justify-items-center justify-self-center mt-10'>
+            <div className='w-[40rem] min-w-50'>
+                <CarouselProvider
+                    naturalSlideWidth={24}
+                    naturalSlideHeight={24}
+                    totalSlides={3}
+                >
+                    <Slider className='mx-5 my-2 rounded-lg'>
+                        <Slide index={0}><img className='w-auto h-auto m-auto' src="/images/icon_logo.png" alt="" /></Slide>
+                        <Slide index={1}><img className='w-auto h-auto m-auto' src="/images/icon_logo.png" alt="" /></Slide>
+                        <Slide index={2}><img className='w-auto h-auto m-auto' src="/images/icon_logo.png" alt="" /></Slide>
+                    </Slider>
+                    <div className='flex justify-center'>
+                        <ButtonBack>
+                            <GrPrevious className="w-10 h-10 m-5"/>
+                        </ButtonBack>
+                        <ButtonNext>
+                            <GrNext className="w-10 h-10 m-5"/>
+                        </ButtonNext>
                     </div>
-                    </div> 
-                    <div className="flex justify-center w-full py-2 gap-2">
-                    <a href="#item1" className="btn btn-xs">1</a> 
-                    <a href="#item2" className="btn btn-xs">2</a> 
-                    <a href="#item3" className="btn btn-xs">3</a> 
-                    <a href="#item4" className="btn btn-xs">4</a>
-                </div>
+                </CarouselProvider>
             </div>
-            <div className='w-56'></div>
-        </>
+            <div className='w-[40rem]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi minima officia optio labore ratione consectetur quo, alias, dignissimos quaerat accusamus a porro, aspernatur illum at aperiam fuga ipsa cum maxime?</div>
+        </div>
     )
 }
 
