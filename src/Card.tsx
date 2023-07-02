@@ -4,13 +4,12 @@ interface CardProps {
     header: string;
     img: string;
     desc?: string;
-    price: number;
     isNew?: boolean;
     link?: string;
     altImg: string;
 }
 
-const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, price, isNew, altImg, link = '#'}) => {
+const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, isNew, altImg, link = '#'}) => {
 
     const renderBadge = (): JSX.Element | null => {
         if(isNew) {
@@ -31,7 +30,7 @@ const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, 
                 </h2>
                 <p className="text-gray-500 mb-5">{desc}</p>
                 <div className="card-actions justify-end">
-                    <button className="btn bg-[#e83b3b] text-white hover:text-black ">KUP {price} PLN</button>
+                    <button className="btn bg-[#e83b3b] text-white hover:text-black ">WIĘCEJ</button>
                 </div>
             </div>
         </Link>

@@ -10,7 +10,7 @@
                 "latex": "Latex Germany",
                 "sizes": [8, 9, 10]
             },
-            "price": 0,
+            "price": [160, 220],
             "mainImg": "/images/marcin_fec.png",
             "photos": "",
             "isNew": 1
@@ -24,7 +24,7 @@
                 "latex": "Latex Germany",
                 "sizes": [7, 9, 10]
             },
-            "price": 0,
+            "price": [150, 200],
             "mainImg": "",
             "photos": "",
             "isNew": 0
@@ -38,7 +38,7 @@
                 "latex": "Latex Germany",
                 "sizes": [7, 9, 10]
             },
-            "price": 0,
+            "price": [150, 200],
             "mainImg": "",
             "photos": "",
             "isNew": 0
@@ -52,7 +52,7 @@
                 "latex": "Latex Germany",
                 "sizes": [8, 9, 10]
             },
-            "price": 0,
+            "price": [230, 230],
             "mainImg": "",
             "photos": "",
             "isNew": 0

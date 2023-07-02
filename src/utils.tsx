@@ -13,7 +13,7 @@ export interface Product {
         latex: string;
         sizes: number[];
     },
-    price: number;
+    price: number[];
     mainImg: string;
     photos: string;
     isNew: boolean;
@@ -22,14 +22,13 @@ export interface Product {
 export const renderProductsCards = (products: Product[], limit?: number): JSX.Element[] => {
     const productsArray: JSX.Element[] = [];
     if(!limit) {
-        for(const {id, name, model, mainImg, price, isNew} of products) {
+        for(const {id, name, model, mainImg, isNew} of products) {
             productsArray.push(
                     <Card 
                         key={id}
                         header={name}
                         desc={model}
                         img={mainImg}
-                        price={price}
                         altImg={name}
                         isNew={isNew}
                         link={`/sklep/produkt/${id}`}
@@ -38,14 +37,13 @@ export const renderProductsCards = (products: Product[], limit?: number): JSX.El
         }
     } else {
         for(let i = 0; i < limit; i++) {
-            const {id, name, model, mainImg, price, isNew} = products[i];
+            const {id, name, model, mainImg, isNew} = products[i];
             productsArray.push(
                 <Card 
                     key={id}
                     header={name}
                     desc={model}
                     img={mainImg}
-                    price={price}
                     altImg={name}
                     isNew={isNew}
                     link={`/sklep/produkt/${id}`}

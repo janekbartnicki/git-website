@@ -1,4 +1,3 @@
-import axios from 'axios';
 import ShortAbout from './ShortAbout';
 import { renderProductsCards, fetchProducts } from './utils';
 
