@@ -6,6 +6,7 @@ import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-re
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { GrPrevious, GrNext } from 'react-icons/gr';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { HiOutlineShoppingCart } from 'react-icons/hi';
 
 
 const ProductDetails: React.FC = () => {
@@ -48,7 +49,40 @@ const ProductDetails: React.FC = () => {
         })
     }
 
-    console.log(data?.price)
+    const renderTableContent = (): JSX.Element => {
+        const sizes = data?.spec.sizes;
+        const small: number[] = [];
+        const large: number[] = [];
+
+        sizes?.forEach((size): void => {
+            if(size < 8) {
+                small.push(size);
+            } else large.push(size);
+        })
+
+        return (
+            <>
+                {
+                    small.length != 0 ?
+                        <tr>
+                            <td>{small.join(', ')}</td>
+                            <td>{data?.price[0]} zł</td>
+                        </tr>
+                    : null
+                }
+                {
+                    large.length != 0 ?
+                        <tr>
+                            <td>{large.join(', ')}</td>
+                            <td>{data?.price[1]} zł</td>
+                        </tr>
+                    : null
+                }
+            </>
+        )
+    }
+
+    renderTableContent();
 
     const selectSize = (): number | string => selectedSize ? selectedSize : '-';
 
@@ -104,7 +138,24 @@ const ProductDetails: React.FC = () => {
                                 {renderSize()}
                             </ul>
                         </div>
-                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black'>DO KOSZYKA</button>
+                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black'>
+                            DO KOSZYKA
+                            <HiOutlineShoppingCart className="w-5 h-5"/>
+                        </button>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="table">
+                            {/* head */}
+                            <thead>
+                            <tr>
+                                <th>Rozmiary</th>
+                                <th>Cena</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {renderTableContent()}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

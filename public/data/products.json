@@ -8,7 +8,7 @@
                 "cut": "Negative Cut, Hybrid Cut",
                 "foam": "4 mm",
                 "latex": "Latex Germany",
-                "sizes": [8, 9, 10]
+                "sizes": [6, 7, 8, 9, 10]
             },
             "price": [160, 220],
             "mainImg": "/images/marcin_fec.png",
@@ -22,7 +22,7 @@
             "spec": {
                 "foam": "4 mm",
                 "latex": "Latex Germany",
-                "sizes": [7, 9, 10]
+                "sizes": [6, 7, 9, 10]
             },
             "price": [150, 200],
             "mainImg": "",
@@ -36,7 +36,7 @@
             "spec": {
                 "foam": "4 mm",
                 "latex": "Latex Germany",
-                "sizes": [7, 9, 10]
+                "sizes": [6, 7, 9, 10]
             },
             "price": [150, 200],
             "mainImg": "",

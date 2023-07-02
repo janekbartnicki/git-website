@@ -3,6 +3,8 @@ import { useWindowScroll } from '@mantine/hooks';
 import { useEffect } from 'react';
 import Card from "./Card";
 
+const PRODUCTS_URL = '/data/products.json';
+
 export interface Product {
     id: number;
     name: string;
@@ -57,7 +59,7 @@ export const renderProductsCards = (products: Product[], limit?: number): JSX.El
 
 export const fetchProducts = async (): Promise<Product[]> => {
     try {
-        const response = await axios.get<{ products: Product[] }>('/data/products.json');
+        const response = await axios.get<{ products: Product[] }>(PRODUCTS_URL);
         return response.data.products;
     } catch (error) {
         throw new Error('Failed to fetch data.');
