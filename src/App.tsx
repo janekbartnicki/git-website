@@ -1,10 +1,11 @@
 import './index.css';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
-import ErrorBoundary from './ErrorBoundary';
-import Home from './Home';
-import Shop from './Shop';
-import ProductDetails from './ProductDetails';
+import ErrorBoundary from './components/ErrorBoundary';
+import Home from './components/Home';
+import Shop from './components/Shop';
+import ProductDetails from './components/ProductDetails';
+import Cart from './components/Cart';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -12,6 +13,7 @@ const router = createBrowserRouter(
         <Route index element={<Home/>}/>
         <Route path='/sklep' element={<Shop/>}/>
         <Route path='/sklep/produkt/:id' element={<ProductDetails/>}/>
+        <Route path='/koszyk' element={<Cart/>}/>
       </Route>
   )
 )

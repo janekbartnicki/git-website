@@ -1,5 +1,5 @@
 import ShortAbout from './ShortAbout';
-import { renderProductsCards, fetchProducts } from './utils';
+import { renderProductsCards, fetchProducts } from '../utils';
 
 // const response = await axios.get('/data/products.json');
 // const products = Object.values(response.data.products) as Product[];

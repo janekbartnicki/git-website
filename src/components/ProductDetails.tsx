@@ -1,7 +1,7 @@
 import { useEffect , useState} from 'react';
 import { useParams} from "react-router";
 import { Link  } from 'react-router-dom';
-import { Product, fetchProducts } from './utils';
+import { Product, fetchProducts } from '../utils';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { GrPrevious, GrNext } from 'react-icons/gr';
@@ -131,7 +131,7 @@ const ProductDetails: React.FC = () => {
                     </div>
                     <p className='flex justify-end lg:md:mx-40 text-5xl text-[#3d61aa]'><b>{price ? `${price} zł` : '- zł'}</b></p>
                     <p className='flex justify-end lg:md:mx-40 text-md'>Wybrany rozmiar: {selectSize()}</p>
-                    <div className='flex my-14 flex-wrap justify-center'>
+                    <div className='flex my-14 flex-wrap justify-center lg:md:justify-start'>
                         <div className="dropdown my-5">
                             <label tabIndex={0} className="btn m-1">Wybierz Rozmiar<IoMdArrowDropdown/></label>
                             <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-20">

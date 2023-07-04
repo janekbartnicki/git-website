@@ -1,7 +1,6 @@
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
-import { AutoScroll } from './utils';
-import { useRef } from 'react';
+import { AutoScroll } from '../utils';
 
 interface NavBarProps {
     cartCount?: number;
@@ -73,7 +72,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">
+                <Link to='/koszyk' className="btn">
                     Koszyk
                     <div className="indicator">
                         <HiOutlineShoppingCart className="w-5 h-5"/>
@@ -82,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                         </svg> */}
                         {renderCartIncicator()}
                     </div>
-                </a>
+                </Link>
             </div>
 
 

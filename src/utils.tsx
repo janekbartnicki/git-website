@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useWindowScroll } from '@mantine/hooks';
 import { useEffect } from 'react';
-import Card from "./Card";
+import Card from "./components/Card";
 
 const PRODUCTS_URL = '/data/products.json';
 
