@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useWindowScroll } from '@mantine/hooks';
 import { useEffect } from 'react';
+import { storage } from './firebase';
+import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import Card from "./components/Card";
 
-const PRODUCTS_URL = '/data/products.json';
+// const PRODUCTS_URL = '/data/products.json';
 
 export interface Product {
     id: number;
@@ -57,14 +59,50 @@ export const renderProductsCards = (products: Product[], limit?: number): JSX.El
     return productsArray;
 }
 
+//Fetching from public/data file not from external database
+
+// export const fetchProducts = async (): Promise<Product[]> => {
+//     try {
+//         const response = await axios.get<{ products: Product[] }>(PRODUCTS_URL);
+//         return response.data.products;
+//     } catch (error) {
+//         throw new Error('Failed to fetch data.');
+//     }
+// };
+
 export const fetchProducts = async (): Promise<Product[]> => {
     try {
-        const response = await axios.get<{ products: Product[] }>(PRODUCTS_URL);
+        const url = await getDownloadURL(ref(storage, 'products.json'));
+        const response = await axios.get<{ products: Product[] }>(url);
         return response.data.products;
     } catch (error) {
         throw new Error('Failed to fetch data.');
     }
 };
+
+export const fetchImages = async (endpoint = 'images/'): Promise<string[] | string> => {
+    try {
+        const storageRef = ref(storage, endpoint);
+        const imagesList = await listAll(storageRef);
+        
+        const imagesUrl: string[] = [];
+        
+        if(imagesList.items.length) {
+            for (const photo of imagesList.items) {
+                const downloadURL = await getDownloadURL(photo);
+                imagesUrl.push(downloadURL);
+            }
+
+            return imagesUrl;
+        } else {
+            return await getDownloadURL(ref(storage, endpoint));
+        }
+
+    } catch (error) {
+        throw new Error('Failed to fetch data.');
+    }
+};
+
 
 
 export const AutoScroll: React.FC = () => {
