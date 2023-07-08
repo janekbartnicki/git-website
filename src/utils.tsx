@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { useWindowScroll } from '@mantine/hooks';
 import { useEffect } from 'react';
-import { storage } from './firebase';
+import { storage, firestore } from './firebase';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import { collection, getDocs } from "firebase/firestore";
 import Card from "./components/Card";
 
 // const PRODUCTS_URL = '/data/products.json';
@@ -70,15 +71,30 @@ export const renderProductsCards = (products: Product[], limit?: number): JSX.El
 //     }
 // };
 
+// export const fetchProducts = async (): Promise<Product[]> => {
+//     try {
+//         const url = await getDownloadURL(ref(storage, 'products.json'));
+//         const response = await axios.get<{ products: Product[] }>(url);
+//         return response.data.products;
+//     } catch (error) {
+//         throw new Error('Failed to fetch data.');
+//     }
+// };
+
 export const fetchProducts = async (): Promise<Product[]> => {
+    const products: Product[] = [];
     try {
-        const url = await getDownloadURL(ref(storage, 'products.json'));
-        const response = await axios.get<{ products: Product[] }>(url);
-        return response.data.products;
+        const querySnapshot = await getDocs(collection(firestore, "products"));
+
+        querySnapshot.forEach((doc) => {
+            products.push(doc.data() as Product);
+        });
+    
+        return products;
     } catch (error) {
-        throw new Error('Failed to fetch data.');
+        throw new Error('Failed to fetch products.');
     }
-};
+}
 
 export const fetchImages = async (endpoint = 'images/'): Promise<string[] | string> => {
     try {
@@ -99,7 +115,7 @@ export const fetchImages = async (endpoint = 'images/'): Promise<string[] | stri
         }
 
     } catch (error) {
-        throw new Error('Failed to fetch data.');
+        throw new Error('Failed to fetch images.');
     }
 };
 

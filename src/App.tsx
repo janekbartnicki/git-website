@@ -6,6 +6,7 @@ import Home from './components/Home';
 import Shop from './components/Shop';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
+import About from './components/About';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -14,6 +15,7 @@ const router = createBrowserRouter(
         <Route path='/sklep' element={<Shop/>}/>
         <Route path='/sklep/produkt/:id' element={<ProductDetails/>}/>
         <Route path='/koszyk' element={<Cart/>}/>
+        <Route path='/o_nas' element={<About/>}/>
       </Route>
   )
 )

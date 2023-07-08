@@ -1,5 +1,5 @@
 import ShortAbout from './ShortAbout';
-import { renderProductsCards, fetchProducts } from '../utils';
+import { renderProductsCards, fetchProducts, fetchImages } from '../utils';
 
 // const response = await axios.get('/data/products.json');
 // const products = Object.values(response.data.products) as Product[];
@@ -7,11 +7,11 @@ import { renderProductsCards, fetchProducts } from '../utils';
 
 
 const products = await fetchProducts();
+const photos = await fetchImages();
 
 const Home: React.FC = () => {
     return (
         <>
-            
             <ShortAbout/>
             <h1 className='text-center font-bold text-2xl'>Wybrane produkty</h1>
             <div className='lg:m-20 flex flex-wrap gap-10'>

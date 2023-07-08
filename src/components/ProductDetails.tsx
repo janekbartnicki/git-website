@@ -7,6 +7,7 @@ import 'pure-react-carousel/dist/react-carousel.es.css';
 import { GrPrevious, GrNext } from 'react-icons/gr';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 
 const ProductDetails: React.FC = () => {
@@ -86,6 +87,10 @@ const ProductDetails: React.FC = () => {
 
     const selectSize = (): number | string => selectedSize ? selectedSize : '-';
 
+    const hideDropdown = (event: React.MouseEvent<HTMLUListElement, MouseEvent>): void => {
+        event.currentTarget.blur();
+    }
+
     return (
         <>
             <div className='flex justify-left m-5'>
@@ -131,10 +136,14 @@ const ProductDetails: React.FC = () => {
                     </div>
                     <p className='flex justify-end lg:md:mx-40 text-5xl text-[#3d61aa]'><b>{price ? `${price} zł` : '- zł'}</b></p>
                     <p className='flex justify-end lg:md:mx-40 text-md'>Wybrany rozmiar: {selectSize()}</p>
-                    <div className='flex my-14 flex-wrap justify-center lg:md:justify-start'>
+                    <p className='flex justify-start mt-8 text-gray-400'>
+                        <div className='m-auto mx-2'><AiOutlineInfoCircle/></div>
+                        Aby poznać cene najpierw wybierz rozmiar produktu.
+                    </p>
+                    <div className='flex my-6 flex-wrap justify-center lg:md:justify-start'>
                         <div className="dropdown my-5">
                             <label tabIndex={0} className="btn m-1">Wybierz Rozmiar<IoMdArrowDropdown/></label>
-                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-20">
+                            <ul tabIndex={0} onClick={e => hideDropdown(e)} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-20">
                                 {renderSize()}
                             </ul>
                         </div>

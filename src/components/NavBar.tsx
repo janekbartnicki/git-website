@@ -39,7 +39,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                             <li><a>Submenu 2</a></li>
                         </ul>
                         </li> */}
-                        <li><a>O nas</a></li>
+                        <li><Link to='/o_nas'>O nas</Link></li>
                     </ul>
                 </div>
                 <Link to='/' className="btn btn-ghost normal-case text-2xl">
@@ -65,7 +65,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                         </ul>
                         </details>
                     </li> */}
-                    <li><a>O nas</a></li>
+                    <li><Link to='/o_nas'>O nas</Link></li>
                 </ul>
             </div>
             <div className="navbar-end">
