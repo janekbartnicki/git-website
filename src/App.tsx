@@ -7,6 +7,8 @@ import Shop from './components/Shop';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
 import About from './components/About';
+import store from './store';
+import { Provider } from 'react-redux';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,7 +23,11 @@ const router = createBrowserRouter(
 )
 
 const App = () => {
-  return <RouterProvider router={router}/>
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router}/>
+    </Provider>
+  )
 }
 
 export default App;

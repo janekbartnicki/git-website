@@ -8,7 +8,7 @@ const Shop: React.FC = () => {
 
     return (
         <>
-            <h1 className="font-bold text-center text-5xl mt-10">Sklep</h1>
+            <h1 className="text-center text-5xl mt-10">Sklep</h1>
             {/* <h1 className="text-bold text-center text-5xl mt-10">Sklep</h1> */}
             <div className='lg:m-20 lg:mt-5 flex flex-wrap gap-10'>
                 {renderProductsCards(products)}

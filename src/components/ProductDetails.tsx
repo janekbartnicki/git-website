@@ -8,13 +8,18 @@ import { GrPrevious, GrNext } from 'react-icons/gr';
 import { IoMdArrowDropdown } from 'react-icons/io';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
+import ReactTextTransition, { presets } from 'react-text-transition';
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../store/slices/cartSlice';
 
 
 const ProductDetails: React.FC = () => {
     const {id} = useParams();
     const [data, setData] = useState<Product | undefined>();
     const [price, setPrice] = useState<number | undefined>(0);
-    const [selectedSize, setSelectedSize] = useState<number | null>(null)
+    const [selectedSize, setSelectedSize] = useState<number | null>(null);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +40,21 @@ const ProductDetails: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSize])
+
+    const handleCartAdd = () => {
+        //TODO: Dodanie funkcjonalności przycisku w przypadku braku danych
+        if(data && selectedSize && price) {
+            const cartProduct = {
+                id: data?.id,
+                name: data?.name,
+                size: selectedSize,
+                price,
+                quantity: 1
+            }
+    
+            dispatch(addProduct(cartProduct));
+        }
+    }
 
     const renderCut = (): JSX.Element | null => {
         if(data?.spec.cut){
@@ -93,13 +113,14 @@ const ProductDetails: React.FC = () => {
 
     return (
         <>
-            <div className='flex justify-left m-5'>
-                <Link to='/sklep'>
-                    <button className='btn bg-[#3d61aa] lg:md:w-64 text-white group'>
-                        <GrPrevious className="group-hover:invert-0 invert"/>
-                        <p className='group-hover:text-black'>Powrót</p>
-                    </button>
-                </Link>
+            <div className='flex justify-center mx-10 my-5 flex-col items-start'>
+                <div className="text-md breadcrumbs">
+                    <ul>
+                        <li><Link to='/'>Strona Główna</Link></li> 
+                        <li><Link to='/sklep'>Sklep</Link></li> 
+                        <li>{data?.name}</li>
+                    </ul>
+                </div><br/>
             </div>
             <div className='flex flex-row flex-wrap justify-center justify-items-center justify-self-center mt-10'>
                 <div className='w-[40rem] min-w-50'>
@@ -134,10 +155,16 @@ const ProductDetails: React.FC = () => {
                             <li>&emsp;<b>Lateks:</b> {data?.spec.latex}</li>
                         </ul>
                     </div>
-                    <p className='flex justify-end lg:md:mx-40 text-5xl text-[#3d61aa]'><b>{price ? `${price} zł` : '- zł'}</b></p>
+                    
+                    <div className='flex justify-end lg:md:mx-40 text-5xl text-[#3d61aa]'>
+                        <ReactTextTransition springConfig={presets.wobbly}>
+                            <b>{price ? `${price}` : '-'}</b>
+                        </ReactTextTransition>
+                        <b>&nbsp;{'zł'}</b>
+                    </div>
                     <p className='flex justify-end lg:md:mx-40 text-md'>Wybrany rozmiar: {selectSize()}</p>
                     <p className='flex justify-start mt-8 text-gray-400'>
-                        <div className='m-auto mx-2'><AiOutlineInfoCircle/></div>
+                        <span className='m-auto mx-2'><AiOutlineInfoCircle/></span>
                         Aby poznać cene najpierw wybierz rozmiar produktu.
                     </p>
                     <div className='flex my-6 flex-wrap justify-center lg:md:justify-start'>
@@ -147,7 +174,7 @@ const ProductDetails: React.FC = () => {
                                 {renderSize()}
                             </ul>
                         </div>
-                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black'>
+                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black' onClick={handleCartAdd}>
                             DO KOSZYKA
                             <HiOutlineShoppingCart className="w-5 h-5"/>
                         </button>
@@ -167,6 +194,14 @@ const ProductDetails: React.FC = () => {
                         </table>
                     </div>
                 </div>
+            </div>
+            <div className='flex justify-center m-10'>
+                <Link to='/sklep'>
+                    <button className='btn bg-[#3d61aa] lg:md:w-64 text-white group'>
+                        <GrPrevious className="group-hover:invert-0 invert"/>
+                        <p className='group-hover:text-black'>Powrót</p>
+                    </button>
+                </Link>
             </div>
         </>
     )

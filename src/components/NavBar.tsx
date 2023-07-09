@@ -1,6 +1,7 @@
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { AutoScroll } from '../utils';
+import { BiLogIn } from 'react-icons/bi';
 
 interface NavBarProps {
     cartCount?: number;
@@ -69,8 +70,11 @@ const NavBar: React.FC<NavBarProps> = props => {
                 </ul>
             </div>
             <div className="navbar-end">
+                <button className='btn'>
+                    <BiLogIn className="w-5 h-5"/>
+                    <span className='hidden xl:lg:md:block'>ZALOGUJ SIĘ</span>
+                </button>
                 <Link to='/koszyk' className="btn">
-                    Koszyk
                     <div className="indicator">
                         <HiOutlineShoppingCart className="w-5 h-5"/>
                         {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
