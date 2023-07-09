@@ -1,4 +1,4 @@
-import { useEffect , useState} from 'react';
+import { useEffect , useState, useRef } from 'react';
 import { useParams} from "react-router";
 import { Link  } from 'react-router-dom';
 import { Product, fetchProducts } from '../utils';
@@ -15,9 +15,14 @@ import { addProduct } from '../store/slices/cartSlice';
 
 const ProductDetails: React.FC = () => {
     const {id} = useParams();
+
     const [data, setData] = useState<Product | undefined>();
     const [price, setPrice] = useState<number | undefined>(0);
     const [selectedSize, setSelectedSize] = useState<number | null>(null);
+    const [quantity, setQuantity] = useState<number>(1);
+    console.log(quantity)
+
+    const addButtonRef = useRef<HTMLButtonElement>(null)
 
     const dispatch = useDispatch();
 
@@ -33,6 +38,14 @@ const ProductDetails: React.FC = () => {
     }, [])
 
     useEffect(() => {
+        if(addButtonRef.current) {
+            if(!price && !selectedSize) {
+                addButtonRef.current.disabled = true;
+            } else addButtonRef.current.disabled= false;
+        }
+    }, [price, selectedSize])
+
+    useEffect(() => {
         if(selectedSize && selectedSize >= 8) {
             setPrice(data?.price[1]);
         } else if(selectedSize) {
@@ -43,13 +56,14 @@ const ProductDetails: React.FC = () => {
 
     const handleCartAdd = () => {
         //TODO: Dodanie funkcjonalności przycisku w przypadku braku danych
+        console.log('clicked')
         if(data && selectedSize && price) {
             const cartProduct = {
                 id: data?.id,
                 name: data?.name,
                 size: selectedSize,
                 price,
-                quantity: 1
+                quantity
             }
     
             dispatch(addProduct(cartProduct));
@@ -158,7 +172,7 @@ const ProductDetails: React.FC = () => {
                     
                     <div className='flex justify-end lg:md:mx-40 text-5xl text-[#3d61aa]'>
                         <ReactTextTransition springConfig={presets.wobbly}>
-                            <b>{price ? `${price}` : '-'}</b>
+                            <b>{price ? `${price * quantity}` : '-'}</b>
                         </ReactTextTransition>
                         <b>&nbsp;{'zł'}</b>
                     </div>
@@ -174,7 +188,10 @@ const ProductDetails: React.FC = () => {
                                 {renderSize()}
                             </ul>
                         </div>
-                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black' onClick={handleCartAdd}>
+                        <div className='flex mt-6 flex-wrap justify-center lg:md:justify-start'>
+                            <input type="number" min={1} value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="input input-bordered w-24 mx-5" /><p className='my-2'> szt.</p>
+                        </div>
+                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black' ref={addButtonRef} onClick={handleCartAdd}>
                             DO KOSZYKA
                             <HiOutlineShoppingCart className="w-5 h-5"/>
                         </button>
