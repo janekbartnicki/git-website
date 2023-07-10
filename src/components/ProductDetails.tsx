@@ -20,7 +20,6 @@ const ProductDetails: React.FC = () => {
     const [price, setPrice] = useState<number | undefined>(0);
     const [selectedSize, setSelectedSize] = useState<number | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
-    console.log(quantity)
 
     const addButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -56,7 +55,6 @@ const ProductDetails: React.FC = () => {
 
     const handleCartAdd = () => {
         //TODO: Dodanie funkcjonalności przycisku w przypadku braku danych
-        console.log('clicked')
         if(data && selectedSize && price) {
             const cartProduct = {
                 id: data?.id,

@@ -1,6 +1,42 @@
 import { SiAllegro } from 'react-icons/si';
+import { RootState } from '../store';
+import { useSelector } from 'react-redux';
+import { CartProduct } from '../store/slices/cartSlice';
 
 const Cart: React.FC = () => {
+    const cartState = useSelector<RootState, CartProduct[]>(state => state.cart);
+
+    const renderEmpty = (): JSX.Element | null => {
+        if(cartState.length === 0) {
+            return (
+                <div className='text-center text-gray-400'>
+                    Koszyk jest pusty.
+                </div>
+            );
+        } else return null;
+    }
+    
+    const renderTable = (): JSX.Element[] | null => {
+        if(cartState.length !== 0) {
+            let itemsCount = 0;
+    
+            const itemsList =  cartState.map(item => {
+                itemsCount += 1
+                return (
+                    <tr key={itemsCount}>
+                        <th>{itemsCount}</th>
+                        <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>{item.name}</p></td>
+                        <td>{item.size}</td>
+                        <td>{item.price * item.quantity} zł</td>
+                        <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
+                    </tr>
+                )
+            })
+            
+            return itemsList;
+        } else return null;
+    }
+
     return (
         <>
             <h1 className="font-bold text-center text-5xl my-16">Twój koszyk</h1>
@@ -16,32 +52,34 @@ const Cart: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                    {/* row 1 */}
-                    <tr>
+
+                    {renderTable()}
+                    {/* <tr>
                         <th>1</th>
                         <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>nazwa1</p></td>
                         <td>7</td>
                         <td>170 zł</td>
                         <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
-                    </tr>
+                    </tr> */}
                     {/* row 2 */}
-                    <tr>
+                    {/* <tr>
                         <th>2</th>
                         <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>nazwa1</p></td>
                         <td>8</td>
                         <td>170 zł</td>
                         <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
-                    </tr>
+                    </tr> */}
                     {/* row 3 */}
-                    <tr>
+                    {/* <tr>
                         <th>3</th>
                         <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>nazwa1</p></td>
                         <td>9</td>
                         <td>170 zł</td>
                         <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
-                    </tr>
+                    </tr> */}
                     </tbody>
                 </table>
+                {renderEmpty()}
             </div>
             <div className="flex justify-around">
                 <div className='text-3xl'>
