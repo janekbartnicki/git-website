@@ -1,13 +1,15 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from 'react';
+import { signUpEmailUser } from '../firebase/emailUsers';
+import { Link } from 'react-router-dom';
 
-const LogInPage: React.FC = () => {
+const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     
-    const auth = getAuth();
+    const handleEmailSignIn = () => {
+        signUpEmailUser(email, password); //zmienić
+    }
 
-    console.log(email, password)
     return (
         <div>
             <h1 className="text-5xl text-center my-10">Logowanie</h1>
@@ -26,16 +28,19 @@ const LogInPage: React.FC = () => {
                         </label>
                         <input type="password" onChange={e => setPassword(e.target.value)} value={password} placeholder="hasło" className="input input-bordered" />
                         <label className="label">
-                            <a href="#" className="label-text-alt link link-hover">Nie pamiętasz hasła?</a>
+                            {/* TODO */}
+                            <a href="#" className="label-text-alt link link-hover">Nie pamiętasz hasła?</a> 
                         </label>
                         </div>
                         <div className="form-control mt-6">
-                            <button className="btn text-white hover:text-black bg-[#3d61aa]">Zaloguj się</button>
+                            <button className="btn text-white hover:text-black bg-[#3d61aa]" onClick={handleEmailSignIn}>Zaloguj się</button>
                         </div>
                         <p className="text-center">lub</p>
-                        <div className="form-control">
-                            <button className="btn text-white hover:text-black bg-[#e83b3b]">Załóż konto</button>
-                        </div>
+                        <Link to='/rejestracja'>
+                            <div className="form-control">
+                                <button className="btn text-white hover:text-black bg-[#e83b3b]">Załóż konto</button>
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -43,4 +48,4 @@ const LogInPage: React.FC = () => {
     )
 }
 
-export default LogInPage;
+export default SignIn;
