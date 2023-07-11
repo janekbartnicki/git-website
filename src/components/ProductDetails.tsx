@@ -66,6 +66,12 @@ const ProductDetails: React.FC = () => {
     
             dispatch(addProduct(cartProduct));
         }
+
+        addButtonRef.current ? addButtonRef.current.className = 'btn my-5 bg-[#66cc8a] text-black mx-16  w-40 text-md hover:text-black hover:bg-[#66cc8a]': null;
+
+        setTimeout(() => {
+            addButtonRef.current ? addButtonRef.current.className = 'btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black': null;
+        }, 300)
     }
 
     const renderCut = (): JSX.Element | null => {
@@ -189,7 +195,7 @@ const ProductDetails: React.FC = () => {
                         <div className='flex mt-6 flex-wrap justify-center lg:md:justify-start'>
                             <input type="number" min={1} value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="input input-bordered w-24 mx-5" /><p className='my-2'> szt.</p>
                         </div>
-                        <button className='btn my-5 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black' ref={addButtonRef} onClick={handleCartAdd}>
+                        <button className='btn my-5 transition delay-150 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black' ref={addButtonRef} onClick={handleCartAdd}>
                             DO KOSZYKA
                             <HiOutlineShoppingCart className="w-5 h-5"/>
                         </button>

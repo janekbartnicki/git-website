@@ -1,15 +1,23 @@
-import { SiAllegro } from 'react-icons/si';
 import { RootState } from '../store';
-import { useSelector } from 'react-redux';
-import { CartProduct } from '../store/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { CartProduct, clearCart, removeProduct } from '../store/slices/cartSlice';
+import ReactTextTransition, { presets } from 'react-text-transition';
+import { GrNext } from 'react-icons/gr';
 
 const Cart: React.FC = () => {
     const cartState = useSelector<RootState, CartProduct[]>(state => state.cart);
+    const dispatch = useDispatch();
+    let sum = 0;
+    let amountOfItems = 0;
+
+    const handleDelete = (id: number, size: number): void => {
+        dispatch(removeProduct({id, size}));
+    }
 
     const renderEmpty = (): JSX.Element | null => {
         if(cartState.length === 0) {
             return (
-                <div className='text-center text-gray-400'>
+                <div className='text-center text-gray-400 my-10'>
                     Koszyk jest pusty.
                 </div>
             );
@@ -21,14 +29,16 @@ const Cart: React.FC = () => {
             let itemsCount = 0;
     
             const itemsList =  cartState.map(item => {
-                itemsCount += 1
+                itemsCount += 1;
+                amountOfItems += item.quantity;
+                sum += item.price * item.quantity;
                 return (
                     <tr key={itemsCount}>
-                        <th>{itemsCount}</th>
                         <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>{item.name}</p></td>
                         <td>{item.size}</td>
+                        <td>{item.quantity} szt.</td>
                         <td>{item.price * item.quantity} zł</td>
-                        <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
+                        <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black' onClick={() => handleDelete(item.id, item.size)}>USUŃ</button></td>
                     </tr>
                 )
             })
@@ -39,14 +49,14 @@ const Cart: React.FC = () => {
 
     return (
         <>
-            <h1 className="font-bold text-center text-5xl my-16">Twój koszyk</h1>
-            <div className="overflow-x-auto my-20 lg:md:mx-44 sm:mx-5">
+            <h1 className="text-center text-5xl my-16">Twój koszyk</h1>
+            <div className="overflow-x-auto my-20 mb-4 lg:md:mx-44 sm:mx-5">
                 <table className="table">
                     <thead>
                         <tr>
-                            <th></th>
                             <th>Nazwa</th>
                             <th>Rozmiar</th>
+                            <th>Ilość</th>
                             <th>Cena</th>
                             <th></th>
                         </tr>
@@ -54,38 +64,32 @@ const Cart: React.FC = () => {
                     <tbody>
 
                     {renderTable()}
-                    {/* <tr>
-                        <th>1</th>
-                        <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>nazwa1</p></td>
-                        <td>7</td>
-                        <td>170 zł</td>
-                        <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
-                    </tr> */}
-                    {/* row 2 */}
-                    {/* <tr>
-                        <th>2</th>
-                        <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>nazwa1</p></td>
-                        <td>8</td>
-                        <td>170 zł</td>
-                        <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
-                    </tr> */}
-                    {/* row 3 */}
-                    {/* <tr>
-                        <th>3</th>
-                        <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>nazwa1</p></td>
-                        <td>9</td>
-                        <td>170 zł</td>
-                        <td className='w-20'><button className='btn bg-red-700 text-white w-15 h-10 m-1 hover:text-black'>USUŃ</button></td>
-                    </tr> */}
                     </tbody>
                 </table>
                 {renderEmpty()}
             </div>
-            <div className="flex justify-around">
-                <div className='text-3xl'>
-                    Suma: 0 zł
+            <div className='flex justify-end mx-48'>
+                <button 
+                    className='btn hover:text-black'
+                    onClick={() => dispatch(clearCart())}    
+                >
+                    WYCZYŚĆ KOSZYK
+                </button>
+            </div>
+            <div className="flex lg:md:justify-end justify-center lg:md:mx-40 lg:md:my-20">
+                <div className='flex flex-col gap-5 w-56'>
+                    <div className="stats shadow">
+                        <div className="stat overflow-hidden">
+                            <div className="stat-title">Łączna kwota:</div>
+                            <div className="stat-value"><ReactTextTransition springConfig={presets.wobbly}>{sum} PLN</ReactTextTransition></div>
+                            <div className="stat-desc">za {amountOfItems} szt.</div>
+                        </div>
+                    </div>
+                    <button className='btn text-white hover:text-black bg-[#3d61aa] group'>
+                        Przejdź do płatości
+                        <GrNext className="group-hover:invert-0 invert"/>
+                    </button>
                 </div>
-                <button className='btn bg-orange-600 text-white hover:text-black '>Przejdź do płatości z <SiAllegro className="w-12 h-12"/></button>
             </div>
         </>
     )

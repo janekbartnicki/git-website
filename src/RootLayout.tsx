@@ -13,8 +13,6 @@ const RootLayout: React.FC = () => {
         amountOfProducts += products.quantity;
     })
 
-    console.log(amountOfProducts);
-
     return (
         <>
             <NavBar cartCount={amountOfProducts}/>

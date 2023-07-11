@@ -70,10 +70,12 @@ const NavBar: React.FC<NavBarProps> = props => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <button className='btn'>
-                    <BiLogIn className="w-5 h-5"/>
-                    <span className='hidden xl:lg:md:block'>ZALOGUJ SIĘ</span>
-                </button>
+                <Link to='/logowanie'>
+                    <button className='btn'>
+                        <BiLogIn className="w-5 h-5"/>
+                        <span className='hidden xl:lg:md:block'>ZALOGUJ SIĘ</span>
+                    </button>
+                </Link>
                 <Link to='/koszyk' className="btn">
                     <div className="indicator">
                         <HiOutlineShoppingCart className="w-5 h-5"/>
