@@ -68,7 +68,7 @@ const Cart: React.FC = () => {
                 </table>
                 {renderEmpty()}
             </div>
-            <div className='flex justify-end mx-48'>
+            <div className='flex md:lg:justify-end justify-center mx-48 my-5'>
                 <button 
                     className='btn hover:text-black'
                     onClick={() => dispatch(clearCart())}    

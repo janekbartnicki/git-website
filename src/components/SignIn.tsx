@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { signUpEmailUser } from '../firebase/emailUsers';
 import { Link } from 'react-router-dom';
+import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     
     const handleEmailSignIn = () => {
-        signUpEmailUser(email, password); //zmienić
+        //
     }
 
     return (

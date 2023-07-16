@@ -11,6 +11,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import RegisteredPage from './components/RegisteredPage';
 
 
 const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
         <Route path='/o_nas' element={<About/>}/>
         <Route path='/logowanie' element={<SignIn/>}/>
         <Route path='/rejestracja' element={<SignUp/>}/>
+        <Route path='/zarejestrowano' element={<RegisteredPage/>}/>
       </Route>
   )
 )

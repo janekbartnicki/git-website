@@ -2,12 +2,22 @@ import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { AutoScroll } from '../utils';
 import { BiLogIn } from 'react-icons/bi';
+import { useSelector } from 'react-redux';
+import { User } from 'firebase/auth';
+import { RootState } from '../store';
+import { AiOutlineUser } from 'react-icons/ai';
 
 interface NavBarProps {
     cartCount?: number;
 }
 
 const NavBar: React.FC<NavBarProps> = props => {
+
+    let {displayName} = useSelector<RootState, Partial<User>>(state => state.user);
+
+    if(displayName && displayName?.length > 10) {
+        displayName = displayName.slice(0, 10) + '...';
+    }
 
     const renderCartIncicator = (): JSX.Element | null => {
         if(props.cartCount && props.cartCount !== 0) {
@@ -70,10 +80,11 @@ const NavBar: React.FC<NavBarProps> = props => {
                 </ul>
             </div>
             <div className="navbar-end">
+                {/* zrobić aby wylogowywało */}
                 <Link to='/logowanie'>
                     <button className='btn'>
-                        <BiLogIn className="w-5 h-5"/>
-                        <span className='hidden xl:lg:md:block'>ZALOGUJ SIĘ</span>
+                        {displayName ? <AiOutlineUser className='w-5 h-5'/> : <BiLogIn className="w-5 h-5"/>}
+                        <span className='hidden xl:lg:md:block'>{displayName ? displayName : 'ZALOGUJ SIĘ'}</span>
                     </button>
                 </Link>
                 <Link to='/koszyk' className="btn">
