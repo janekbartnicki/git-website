@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
 import { renderSuccess } from '../utils';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { GrPrevious } from 'react-icons/gr';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -57,50 +58,65 @@ const SignIn: React.FC = () => {
     }
 
     const renderCheck = (): JSX.Element => {
-        return <div className='z-30 absolute p-4 text-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2'><AiOutlineCheckCircle className="w-72 h-72 opacity-20"/></div>
+        return <div className='flex justify-center flex-col items-center'>
+            <AiOutlineCheckCircle className="w-72 h-72 opacity-90"/>
+            <Link to='/'>
+                    <button className='btn lg:md:w-64'>
+                        <GrPrevious/>
+                        <p>Strona Główna</p>
+                    </button>
+            </Link>
+        </div>
+    }
+
+    const renderForm = (): JSX.Element => {
+        return(
+            <>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Email</span>
+                    </label>
+                    <input type="email" onChange={e => setEmail(e.target.value)} value={email} placeholder="email" className="input input-bordered" />
+                    </div>
+                    <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Hasło</span>
+                    </label>
+                    <input type="password" onChange={e => setPassword(e.target.value)} value={password} placeholder="hasło" className="input input-bordered" />
+                    <label className="label">
+                        {/* TODO */}
+                        <a href="#" className="label-text-alt link link-hover">Nie pamiętasz hasła?</a> 
+                    </label>
+                    </div>
+                    <div className="form-control mt-6">
+                        <button 
+                            className="btn text-white hover:text-black bg-[#3d61aa]" 
+                            onClick={() => {
+                                handleEmailSignIn();
+                                renderButtonContent();
+                            }}
+                            ref={submitBtnRef}>
+                                {buttonContent}
+                            </button>
+                    </div>
+                    <p className="text-center">lub</p>
+                    <Link to='/rejestracja'>
+                        <div className="form-control">
+                            <button className="btn text-white hover:text-black bg-[#e83b3b]">Załóż konto</button>
+                        </div>
+                    </Link>
+            </>
+        )
     }
 
     return (
         <div className='transition transform'>
-            {success ? renderCheck() : null}
             <div>
                 <h1 className="text-5xl text-center my-10">Logowanie</h1>
                 <div className="flex justify-center my-20">
                     <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <div className="card-body">
-                            <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input type="email" onChange={e => setEmail(e.target.value)} value={email} placeholder="email" className="input input-bordered" />
-                            </div>
-                            <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Hasło</span>
-                            </label>
-                            <input type="password" onChange={e => setPassword(e.target.value)} value={password} placeholder="hasło" className="input input-bordered" />
-                            <label className="label">
-                                {/* TODO */}
-                                <a href="#" className="label-text-alt link link-hover">Nie pamiętasz hasła?</a> 
-                            </label>
-                            </div>
-                            <div className="form-control mt-6">
-                                <button 
-                                    className="btn text-white hover:text-black bg-[#3d61aa]" 
-                                    onClick={() => {
-                                        handleEmailSignIn();
-                                        renderButtonContent();
-                                    }}
-                                    ref={submitBtnRef}>
-                                        {buttonContent}
-                                    </button>
-                            </div>
-                            <p className="text-center">lub</p>
-                            <Link to='/rejestracja'>
-                                <div className="form-control">
-                                    <button className="btn text-white hover:text-black bg-[#e83b3b]">Załóż konto</button>
-                                </div>
-                            </Link>
+                            {success ? renderCheck() : renderForm()}
                         </div>
                     </div>
                 </div>

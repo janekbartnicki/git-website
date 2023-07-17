@@ -5,6 +5,7 @@ import { handleEmailAuthError, EmailError } from '../firebase/handleEmailAuthErr
 import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { AiOutlineCheckCircle } from 'react-icons/ai';
+import { GrPrevious } from 'react-icons/gr';
 
 const SignUp: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -54,8 +55,6 @@ const SignUp: React.FC = () => {
             </div>
         )
     }
-
-    
     
     const handleEmailSignUp = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
@@ -77,46 +76,50 @@ const SignUp: React.FC = () => {
     }
 
     const renderCheck = (): JSX.Element => {
-        return <div className='z-30 absolute p-4 text-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2'><AiOutlineCheckCircle className="w-72 h-72 opacity-20"/></div>
+        return <div className='flex justify-center flex-col items-center'>
+            <AiOutlineCheckCircle className="w-72 h-72 opacity-90"/>
+            <Link to='/'>
+                    <button className='btn lg:md:w-64'>
+                        <GrPrevious/>
+                        <p>Strona Główna</p>
+                    </button>
+            </Link>
+        </div>
     }
 
-    return (
-        <div>
-            {success ? renderCheck() : null}
-            <h1 className="text-5xl text-center my-10">Rejestracja</h1>
-            <div className="flex justify-center my-20">
-                <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                    <div className="card-body">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input type="email" onChange={e => setEmail(e.target.value)} value={email} placeholder="email" className="input input-bordered" />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Nazwa użytkownika</span>
-                            </label>
-                            <input type="text" onChange={e => setUsername(e.target.value)} value={username} placeholder="nazwa użytkownika" className="input input-bordered" />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Hasło</span>
-                            </label>
-                            <input type="password" onChange={e => setPassword(e.target.value)} value={password} placeholder="hasło" className="input input-bordered" />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Powtórz hasło</span>
-                            </label>
-                            <input type="password" onChange={e => setConfirmPassword(e.target.value)} value={confirmPassword} placeholder="powtórz hasło" className="input input-bordered mb-2" />
-                            {
-                                password !== confirmPassword ?
-                                    <div className="tooltip tooltip-open tooltip-error tooltip-bottom" data-tip="Hasła nie są takie same!"></div>
-                                    : null
-                            }
-                        </div>
-                        <div className="form-control mt-10">
+    const renderForm = (): JSX.Element => {
+        return (
+            <>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Email</span>
+                    </label>
+                    <input type="email" onChange={e => setEmail(e.target.value)} value={email} placeholder="email" className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Nazwa użytkownika</span>
+                    </label>
+                    <input type="text" onChange={e => setUsername(e.target.value)} value={username} placeholder="nazwa użytkownika" className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Hasło</span>
+                    </label>
+                    <input type="password" onChange={e => setPassword(e.target.value)} value={password} placeholder="hasło" className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                    <label className="label">
+                        <span className="label-text">Powtórz hasło</span>
+                    </label>
+                    <input type="password" onChange={e => setConfirmPassword(e.target.value)} value={confirmPassword} placeholder="powtórz hasło" className="input input-bordered mb-2" />
+                    {
+                        password !== confirmPassword ?
+                            <div className="tooltip tooltip-open tooltip-error tooltip-bottom" data-tip="Hasła nie są takie same!"></div>
+                            : null
+                    }
+                </div>
+                <div className="form-control mt-10">
                             <button 
                                 className="btn text-white hover:text-black bg-[#3d61aa]" 
                                 type='submit' 
@@ -134,6 +137,17 @@ const SignUp: React.FC = () => {
                                 <button className="btn text-black">Powrót</button>
                             </div>
                         </Link>
+            </>
+        )
+    }
+
+    return (
+        <div>
+            <h1 className="text-5xl text-center my-10">Rejestracja</h1>
+            <div className="flex justify-center my-20">
+                <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                    <div className="card-body">
+                        {success ? renderCheck() : renderForm()}
                     </div>
                 </div>
             </div>
