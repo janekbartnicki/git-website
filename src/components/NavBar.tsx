@@ -81,12 +81,21 @@ const NavBar: React.FC<NavBarProps> = props => {
             </div>
             <div className="navbar-end">
                 {/* zrobić aby wylogowywało */}
-                <Link to='/logowanie'>
-                    <button className='btn'>
-                        {displayName ? <AiOutlineUser className='w-5 h-5'/> : <BiLogIn className="w-5 h-5"/>}
-                        <span className='hidden xl:lg:md:block'>{displayName ? displayName : 'ZALOGUJ SIĘ'}</span>
-                    </button>
-                </Link>
+                {
+                    displayName ? 
+                        <Link to='/konto'>
+                            <button className='btn'>
+                                {displayName ? <AiOutlineUser className='w-5 h-5'/> : <BiLogIn className="w-5 h-5"/>}
+                                <span className='hidden xl:lg:md:block'>{displayName ? displayName : 'ZALOGUJ SIĘ'}</span>
+                            </button>
+                        </Link> :
+                        <Link to='/logowanie'>
+                            <button className='btn'>
+                                {displayName ? <AiOutlineUser className='w-5 h-5'/> : <BiLogIn className="w-5 h-5"/>}
+                                <span className='hidden xl:lg:md:block'>{displayName ? displayName : 'ZALOGUJ SIĘ'}</span>
+                            </button>
+                        </Link>
+                }
                 <Link to='/koszyk' className="btn">
                     <div className="indicator">
                         <HiOutlineShoppingCart className="w-5 h-5"/>

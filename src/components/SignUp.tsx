@@ -1,9 +1,10 @@
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { handleEmailAuthError, EmailError } from '../firebase/handleEmailAuthErrors';
 import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
+import { AiOutlineCheckCircle } from 'react-icons/ai';
 
 const SignUp: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -12,8 +13,20 @@ const SignUp: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [error, setError] = useState<{code: string; message: string} | undefined>()
     const [success, setSuccess] = useState<boolean>(false);
+    const [buttonContent, setButtonContent] = useState<JSX.Element | string>('ZAREJESTRUJ SIĘ');
+
+    const submitBtnRef = useRef<HTMLButtonElement | null>(null);
 
     const dispatch = useDispatch();
+
+    const renderButtonContent = (): void => {
+        if (submitBtnRef.current) {
+            setButtonContent(<span className="loading loading-spinner loading-sm"></span>);
+            setTimeout(() => {
+                setButtonContent('ZAREJESTRUJ SIĘ');
+            }, 1500);
+        }
+    }
 
     const renderError = (): JSX.Element | null => {
         if(!success) {
@@ -41,6 +54,8 @@ const SignUp: React.FC = () => {
             </div>
         )
     }
+
+    
     
     const handleEmailSignUp = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
@@ -61,8 +76,13 @@ const SignUp: React.FC = () => {
         }
     }
 
+    const renderCheck = (): JSX.Element => {
+        return <div className='z-30 absolute p-4 text-center transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2'><AiOutlineCheckCircle className="w-72 h-72 opacity-20"/></div>
+    }
+
     return (
         <div>
+            {success ? renderCheck() : null}
             <h1 className="text-5xl text-center my-10">Rejestracja</h1>
             <div className="flex justify-center my-20">
                 <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
@@ -100,8 +120,12 @@ const SignUp: React.FC = () => {
                             <button 
                                 className="btn text-white hover:text-black bg-[#3d61aa]" 
                                 type='submit' 
-                                onClick={e => handleEmailSignUp(e)}>
-                                    Zarejestruj się
+                                ref={submitBtnRef}
+                                onClick={e => {
+                                    handleEmailSignUp(e);
+                                    renderButtonContent();
+                                }}>
+                                    {buttonContent}
                             </button>
                         </div>
                         <p className="text-center">lub</p>

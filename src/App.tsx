@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import RegisteredPage from './components/RegisteredPage';
+import UserAccount from './components/UserAccount';
 
 
 const router = createBrowserRouter(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
         <Route path='/logowanie' element={<SignIn/>}/>
         <Route path='/rejestracja' element={<SignUp/>}/>
         <Route path='/zarejestrowano' element={<RegisteredPage/>}/>
+        <Route path='/konto' element={<UserAccount/>}/>
       </Route>
   )
 )

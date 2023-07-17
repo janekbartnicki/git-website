@@ -5,6 +5,7 @@ import { storage, firestore } from './firebase';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { collection, getDocs } from "firebase/firestore";
 import Card from "./components/Card";
+import { Link } from 'react-router-dom';
 
 // const PRODUCTS_URL = '/data/products.json';
 
@@ -131,4 +132,18 @@ export const AutoScroll: React.FC = () => {
     }, [location]);
 
     return null;
+}
+
+//badges
+
+export const renderSuccess = (message: string): JSX.Element => {
+    return (
+        <div className='z-10 sticky bottom-10 lg:md:px-80 px-5 transition'>
+            <div className="alert alert-success shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <h3>{message}</h3>
+                <Link to='/'><button className="btn btn-sm">Przejdź do strony głównej</button></Link>
+            </div>
+        </div>
+    )
 }
