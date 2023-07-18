@@ -1,11 +1,11 @@
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { handleEmailAuthError, EmailError } from '../firebase/handleEmailAuthErrors';
 import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
-import { GrPrevious } from 'react-icons/gr';
+import { renderCheck, renderError, renderSuccess } from '../formUtils';
+import { auth } from '../firebase';
 
 const SignUp: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -28,38 +28,10 @@ const SignUp: React.FC = () => {
             }, 1500);
         }
     }
-
-    const renderError = (): JSX.Element | null => {
-        if(!success) {
-            return (
-                <div className='z-10 sticky bottom-10 lg:md:px-80 px-5 transition'>
-                    <div className="alert alert-warning">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <span>Uwaga: <b>{error?.code}</b> {error?.message}</span>
-                    </div>
-                </div>
-            )
-        } else return null;
-    }
-
-    const renderSuccess = (): JSX.Element => {
-        return (
-            <div className='z-10 sticky bottom-10 lg:md:px-80 px-5 transition'>
-                <div className="alert alert-success shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <h3>Pomyślnie utworzono konto!</h3>
-                    <Link to='/'><button className="btn btn-sm">Przejdź do strony głównej</button></Link>
-                </div>
-            </div>
-        )
-    }
     
     const handleEmailSignUp = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         if(password === confirmPassword && username && email) {
-            const auth = getAuth();
 
             try {
                 const {user} = await createUserWithEmailAndPassword(auth, email, password);
@@ -72,19 +44,9 @@ const SignUp: React.FC = () => {
             } catch(error) {
                 setError(handleEmailAuthError(error as EmailError));
             }
+        } else if(!username) {
+            setError({code: 'Brak nazwy użytkownika!', message: ''})
         }
-    }
-
-    const renderCheck = (): JSX.Element => {
-        return <div className='flex justify-center flex-col items-center'>
-            <AiOutlineCheckCircle className="w-72 h-72 opacity-90"/>
-            <Link to='/'>
-                    <button className='btn lg:md:w-64'>
-                        <GrPrevious/>
-                        <p>Strona Główna</p>
-                    </button>
-            </Link>
-        </div>
     }
 
     const renderForm = (): JSX.Element => {
@@ -100,7 +62,7 @@ const SignUp: React.FC = () => {
                     <label className="label">
                         <span className="label-text">Nazwa użytkownika</span>
                     </label>
-                    <input type="text" onChange={e => setUsername(e.target.value)} value={username} placeholder="nazwa użytkownika" className="input input-bordered" />
+                    <input type="text" required onChange={e => setUsername(e.target.value)} value={username} placeholder="nazwa użytkownika" className="input input-bordered" />
                 </div>
                 <div className="form-control">
                     <label className="label">
@@ -151,9 +113,8 @@ const SignUp: React.FC = () => {
                     </div>
                 </div>
             </div>
-            {error ? renderError() : null}
-            {success ? renderSuccess() : null}
-            {/* {renderSuccess()} */}
+            {error ? renderError(success, error) : null}
+            {success ? renderSuccess('Pomyślnie założono konto!') : null}
         </div>
     );
 }

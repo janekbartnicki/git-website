@@ -13,6 +13,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import RegisteredPage from './components/RegisteredPage';
 import UserAccount from './components/UserAccount';
+import PasswordReset from './components/PasswordReset';
 
 
 const router = createBrowserRouter(
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route path='/rejestracja' element={<SignUp/>}/>
         <Route path='/zarejestrowano' element={<RegisteredPage/>}/>
         <Route path='/konto' element={<UserAccount/>}/>
+        <Route path='/reset' element={<PasswordReset/>}/>
       </Route>
   )
 )

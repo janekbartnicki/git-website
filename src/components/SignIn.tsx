@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { EmailError, handleEmailAuthError } from '../firebase/handleEmailAuthErrors';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
-import { renderSuccess } from '../utils';
-import { AiOutlineCheckCircle } from 'react-icons/ai';
-import { GrPrevious } from 'react-icons/gr';
+import { renderCheck, renderError, renderSuccess } from '../formUtils';
+import { FcGoogle } from 'react-icons/fc';
+import { auth, googleProvider } from '../firebase';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -28,24 +28,35 @@ const SignIn: React.FC = () => {
         }
     }
 
-    const renderError = (): JSX.Element | null => {
-        if(!success) {
-            return (
-                <div className='z-10 sticky bottom-10 lg:md:px-80 px-5 transition'>
-                    <div className="alert alert-warning">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <span>Uwaga: <b>{error?.code ? error?.code : 'Wystąpił błąd.'}</b> {error?.message}</span>
-                    </div>
-                </div>
-            )
-        } else return null;
+    const handleGoogleSignIn = async () => {
+        try {
+            const {user} = await signInWithPopup(auth, googleProvider);
+            setSuccess(true);
+            dispatch(setUser(user));
+        } catch(error) {
+            setError(handleEmailAuthError(error as EmailError));
+        }
+            // .then((result) => {
+            //     // This gives you a Google Access Token. You can use it to access the Google API.
+            //     // const credential = GoogleAuthProvider.credentialFromResult(result);
+            //     // const token = credential.accessToken;
+            //     // The signed-in user info.
+            //     const user = result.user;
+            //     // IdP data available using getAdditionalUserInfo(result)
+            //     // ...
+            // }).catch((error) => {
+            //     // Handle Errors here.
+            //     const errorCode = error.code;
+            //     const errorMessage = error.message;
+            //     // The email of the user's account used.
+            //     // const email = error.customData.email;
+            //     // The AuthCredential type that was used.
+            //     // const credential = GoogleAuthProvider.credentialFromError(error);
+            //     // ...
+            // });
     }
 
-    const handleEmailSignIn = async () => {
-        const auth = getAuth();
-        
+    const handleEmailSignIn = async () => {   
         try {
             const {user} = await signInWithEmailAndPassword(auth, email, password);
             setSuccess(true);
@@ -55,18 +66,6 @@ const SignIn: React.FC = () => {
         }
         
         
-    }
-
-    const renderCheck = (): JSX.Element => {
-        return <div className='flex justify-center flex-col items-center'>
-            <AiOutlineCheckCircle className="w-72 h-72 opacity-90"/>
-            <Link to='/'>
-                    <button className='btn lg:md:w-64'>
-                        <GrPrevious/>
-                        <p>Strona Główna</p>
-                    </button>
-            </Link>
-        </div>
     }
 
     const renderForm = (): JSX.Element => {
@@ -85,7 +84,7 @@ const SignIn: React.FC = () => {
                     <input type="password" onChange={e => setPassword(e.target.value)} value={password} placeholder="hasło" className="input input-bordered" />
                     <label className="label">
                         {/* TODO */}
-                        <a href="#" className="label-text-alt link link-hover">Nie pamiętasz hasła?</a> 
+                        <Link to="/reset" className="label-text-alt link link-hover">Nie pamiętasz hasła?</Link> 
                     </label>
                     </div>
                     <div className="form-control mt-6">
@@ -99,6 +98,9 @@ const SignIn: React.FC = () => {
                                 {buttonContent}
                             </button>
                     </div>
+                    <button className='btn' onClick={handleGoogleSignIn}>
+                        <FcGoogle className="w-5 h-5"/>Zaloguj się z Google
+                    </button>
                     <p className="text-center">lub</p>
                     <Link to='/rejestracja'>
                         <div className="form-control">
@@ -120,7 +122,7 @@ const SignIn: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                {error ? renderError() : null}
+                {error ? renderError(success, error) : null}
                 {success ? renderSuccess('Pomyślnie zalogowano!') : null}
             </div>
         </div>
