@@ -10,7 +10,8 @@ const Footer: React.FC = () => {
                 GiT Goalkeeper Gloves <br/>Marcin Feć <span>&#183;</span> Opole
                 </p> 
                 <a href="mailto:szkolka.marcin.fec@interia.pl">szkolka.marcin.fec@interia.pl</a>
-                {/* <p>Copyright © 2023 - All right reserved</p> */}
+                {/* <p>Copyright © 2023 - All right reserved</p> */}<br/>
+                <a className='hover:underline hover:cursor-pointer'>Regulamin sklepu</a>
             </div> 
             <div>
                 <div className="grid grid-flow-col gap-4">

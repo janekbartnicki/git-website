@@ -54,7 +54,7 @@ const ProductDetails: React.FC = () => {
     }, [selectedSize])
 
     const handleCartAdd = () => {
-        //TODO: Dodanie funkcjonalności przycisku w przypadku braku danych
+        //TODO: Dodanie funkcjonalności przycisku w przypadku na stanie
         if(data && selectedSize && price) {
             const cartProduct = {
                 id: data?.id,
