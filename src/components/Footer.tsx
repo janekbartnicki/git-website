@@ -1,4 +1,5 @@
 import { TiSocialInstagram } from 'react-icons/ti';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
     return (
@@ -11,7 +12,7 @@ const Footer: React.FC = () => {
                 </p> 
                 <a href="mailto:szkolka.marcin.fec@interia.pl">szkolka.marcin.fec@interia.pl</a>
                 {/* <p>Copyright © 2023 - All right reserved</p> */}<br/>
-                <a className='hover:underline hover:cursor-pointer'>Regulamin sklepu</a>
+                <Link to='/regulamin' className='hover:underline hover:cursor-pointer'>Regulamin sklepu</Link>
             </div> 
             <div>
                 <div className="grid grid-flow-col gap-4">

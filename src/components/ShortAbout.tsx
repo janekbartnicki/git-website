@@ -11,9 +11,9 @@ const ShortAbout: React.FC = () => {
                 <p className="text-2xl">Marka GiT została stworzona przez wieloletniego zawodnika oraz trenera <b>Marcina Feć</b>. Grał on w takich klubach jak <b>Odra Opole</b> czy <b>Piast Gliwice</b>. Aktualnie prowadzi własną szkółkę bramkarską oraz zasila sztab szkoleniowy pierwszoligowej OKS Odry Opole jako trener bramkarzy.<br/><br/>W oparciu o doświadczenia między słupkami zaprojketował on serię <b>najwyższej jakości</b> rękawic bramkarskich. Oprócz znakomitych osiągów produkt cechuje także świetny wygląd i ergonomia.</p>
                 <div className='hidden xl:block'>
                     <div className='flex justify-center my-24'>
-                        <Link to='/o_nas'>
+                        <Link to='/sklep'>
                             <button className='btn bg-[#3d61aa] lg:md:w-64 text-white group'>
-                                <p className='group-hover:text-black'>Więcej o Nas</p>
+                                <p className='group-hover:text-black'>Przejdź do Sklepu</p>
                                 <GrNext className="group-hover:invert-0 invert"/>
                             </button>
                         </Link>
