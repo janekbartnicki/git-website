@@ -1,7 +1,9 @@
 import { fetchProducts, renderProductsCards } from "../utils";
 import Banner from "./Banner";
 import ShortAbout from "./ShortAbout";
+
 const products = await fetchProducts();
+
 const About: React.FC = () => {
     return (
         <>

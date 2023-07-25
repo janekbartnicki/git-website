@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
 import { renderCheck, renderError, renderSuccess } from '../formUtils';
 import { FcGoogle } from 'react-icons/fc';
-import { auth, googleProvider } from '../firebase';
+import { auth, firestore, googleProvider } from '../firebase';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -31,6 +32,16 @@ const SignIn: React.FC = () => {
     const handleGoogleSignIn = async () => {
         try {
             const {user} = await signInWithPopup(auth, googleProvider);
+
+            const usersCollectionRef = collection(firestore, 'users');
+            const userDocRef = doc(usersCollectionRef, user.uid);
+
+            await setDoc(userDocRef, {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName
+            })
+
             setSuccess(true);
             dispatch(setUser(user));
         } catch(error) {

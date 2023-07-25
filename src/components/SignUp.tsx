@@ -1,11 +1,12 @@
-import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { handleEmailAuthError, EmailError } from '../firebase/handleEmailAuthErrors';
 import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import { renderCheck, renderError, renderSuccess } from '../formUtils';
-import { auth } from '../firebase';
+import { auth, firestore } from '../firebase';
+import { collection, doc, setDoc } from "firebase/firestore";
 
 const SignUp: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -39,6 +40,16 @@ const SignUp: React.FC = () => {
                 await updateProfile(user, {
                     displayName: username
                 })
+
+                const usersCollectionRef = collection(firestore, 'users');
+                const userDocRef = doc(usersCollectionRef, user.uid);
+
+                await setDoc(userDocRef, {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName
+                })
+
                 setSuccess(true);
                 dispatch(setUser(user));
             } catch(error) {
