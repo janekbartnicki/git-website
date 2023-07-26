@@ -1,4 +1,5 @@
 import './index.css';
+import { useState } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -15,9 +16,22 @@ import RegisteredPage from './components/RegisteredPage';
 import UserAccount from './components/UserAccount';
 import PasswordReset from './components/PasswordReset';
 import Contact from './components/Contact';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
+import { getUser } from './utils';
+import AdminPanel from './components/AdminPanel';
 
+const App = () => {
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);  
 
-const router = createBrowserRouter(
+  onAuthStateChanged(auth, async user => {
+    if(user?.uid) {
+      const {isAdmin} = await getUser(user.uid);
+      isAdmin ? setIsAdmin(true) : setIsAdmin(false);
+    }
+  })
+
+  const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<RootLayout/>} errorElement={<ErrorBoundary/>}>
         <Route index element={<Home/>}/>
@@ -31,11 +45,11 @@ const router = createBrowserRouter(
         <Route path='/konto' element={<UserAccount/>}/>
         <Route path='/reset' element={<PasswordReset/>}/>
         <Route path='/kontakt' element={<Contact/>}/>
+        { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null }
       </Route>
+    )
   )
-)
 
-const App = () => {
   return (
     <Provider store={store}>
       <RouterProvider router={router}/>

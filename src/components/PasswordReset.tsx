@@ -10,7 +10,6 @@ const PasswordReset: React.FC = () => {
 
         try {
             await sendPasswordResetEmail(auth, email);
-            console.log('send')
         } catch(error) {
             throw new Error();
         }

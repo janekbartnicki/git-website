@@ -3,7 +3,7 @@ import { useWindowScroll } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { storage, firestore } from './firebase';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import Card from "./components/Card";
 import { Link } from 'react-router-dom';
 
@@ -23,6 +23,13 @@ export interface Product {
     mainImg: string;
     photos: string;
     isNew: boolean;
+}
+
+export interface FirestoreUser {
+    displayName: string;
+    email: string;
+    uid: string;
+    isAdmin?: boolean;
 }
 
 export const renderProductsCards = (products: Product[], limit?: number): JSX.Element[] => {
@@ -81,6 +88,19 @@ export const renderProductsCards = (products: Product[], limit?: number): JSX.El
 //         throw new Error('Failed to fetch data.');
 //     }
 // };
+
+export const getUser = async (uid: string): Promise<FirestoreUser> => {
+    try {
+        const usersCollectionRef = collection(firestore, 'users');
+        const userRef = doc(usersCollectionRef, uid);
+        const userSnapshot = await getDoc(userRef);
+
+        const userData = userSnapshot.data();
+        return userData as FirestoreUser;
+    } catch(error) {
+        throw new Error('Failed to fetch products.');
+    }
+}
 
 export const fetchProducts = async (): Promise<Product[]> => {
     const products: Product[] = [];

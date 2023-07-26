@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { EmailError, handleEmailAuthError } from '../firebase/handleEmailAuthErrors';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/slices/userSlice';
 import { renderCheck, renderError, renderSuccess } from '../formUtils';
 import { FcGoogle } from 'react-icons/fc';
 import { auth, firestore, googleProvider } from '../firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const SignIn: React.FC = () => {
     const [email, setEmail] = useState<string>('');
@@ -35,36 +35,21 @@ const SignIn: React.FC = () => {
 
             const usersCollectionRef = collection(firestore, 'users');
             const userDocRef = doc(usersCollectionRef, user.uid);
-
-            await setDoc(userDocRef, {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName
-            })
+            const userDocSnapshot = await getDoc(userDocRef);
+            
+            if(!userDocSnapshot.exists()) {
+                await setDoc(userDocRef, {
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName
+                })
+            }
 
             setSuccess(true);
             dispatch(setUser(user));
         } catch(error) {
             setError(handleEmailAuthError(error as EmailError));
         }
-            // .then((result) => {
-            //     // This gives you a Google Access Token. You can use it to access the Google API.
-            //     // const credential = GoogleAuthProvider.credentialFromResult(result);
-            //     // const token = credential.accessToken;
-            //     // The signed-in user info.
-            //     const user = result.user;
-            //     // IdP data available using getAdditionalUserInfo(result)
-            //     // ...
-            // }).catch((error) => {
-            //     // Handle Errors here.
-            //     const errorCode = error.code;
-            //     const errorMessage = error.message;
-            //     // The email of the user's account used.
-            //     // const email = error.customData.email;
-            //     // The AuthCredential type that was used.
-            //     // const credential = GoogleAuthProvider.credentialFromError(error);
-            //     // ...
-            // });
     }
 
     const handleEmailSignIn = async () => {   
@@ -74,9 +59,7 @@ const SignIn: React.FC = () => {
             dispatch(setUser(user));
         } catch(error) {
             setError(handleEmailAuthError(error as EmailError));
-        }
-        
-        
+        }   
     }
 
     const renderForm = (): JSX.Element => {
