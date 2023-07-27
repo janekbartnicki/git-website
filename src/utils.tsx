@@ -13,6 +13,7 @@ export interface Product {
     id: number;
     name: string;
     model: string;
+    inStock: {[key: string]: number},
     spec: {
         cut?: string;
         foam: string;
