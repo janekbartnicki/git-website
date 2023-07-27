@@ -20,6 +20,7 @@ const ProductDetails: React.FC = () => {
     const [price, setPrice] = useState<number | undefined>(0);
     const [selectedSize, setSelectedSize] = useState<number | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
+    const [inStock, setInStock] = useState<number | null>(null);
 
     const addButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -43,6 +44,14 @@ const ProductDetails: React.FC = () => {
             } else addButtonRef.current.disabled= false;
         }
     }, [price, selectedSize])
+
+    // useEffect(() => {
+    //     const fetchStock = async () => {
+    //         return await getStock(data, id, selectedSize)
+    //     }
+
+    //     setInStock()
+    // }, [selectedSize])
 
     useEffect(() => {
         if(selectedSize && selectedSize >= 8) {

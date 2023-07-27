@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input, Select, SelectItem } from '@mantine/core';
-import { fetchProducts } from '../utils';
+import { Product, fetchProducts } from '../utils';
 import { doc, setDoc } from 'firebase/firestore';
 import { firestore } from '../firebase';
 
-const products = await fetchProducts();
+let products = await fetchProducts();
 
 const convertToSelectId = (): SelectItem[] => {
     const productsArray = products.map(product => {
@@ -24,13 +24,8 @@ const convertToSelectSize = (id: string | null): (SelectItem | string)[] => {
     } else return ['',''];
 }
 
-const getStock = (id: string | number, size: string | number): number | null => {
-    if(id && size && products[Number(id) - 1]) {
-        return products[Number(id) - 1].inStock[size];
-    } else return null;
-}
-
 const handleStockSubmit = async (selectedId: string, selectedSize: string, inStock: string): Promise<void> => {
+    products = await fetchProducts();
     await setDoc(doc(firestore,  'products', `${selectedId}`), {
         ...products[Number(selectedId) - 1],
         inStock: {
@@ -38,6 +33,46 @@ const handleStockSubmit = async (selectedId: string, selectedSize: string, inSto
             [selectedSize]: Number(inStock)
         }
     })
+    products = await fetchProducts();
+}
+
+const getStock = (id: string | number, size: string | number): number | null => {
+    if(id && size && products[Number(id) - 1]) {
+        return products[Number(id) - 1].inStock[size];
+    } else return null;
+}
+
+const renderTable = (products: Product[]): JSX.Element => {
+    const renderedList = products.map((product, index) => {
+        const { inStock, name } = product;
+        const stockKeys = Object.keys(inStock);
+        const stockValues = Object.values(inStock);
+
+        const keysArray = stockKeys.map((key, i) => (
+            <React.Fragment key={`key_${index}_${i}`}>
+                <p className='text-center'>{key}</p>
+                <br/>
+                <hr/>
+            </React.Fragment>
+        ));
+
+        const valuesArray = stockValues.map((value, i) => (
+            <React.Fragment key={`value_${index}_${i}`}>
+                <p className='text-center'>{value}</p>
+                <br/>
+                <hr/>
+            </React.Fragment>
+        ));
+
+        return (
+            <tr key={`row_${index}`}>
+                <th>{name}</th>
+                <td className='pr-0 border-r-2 border-gray-200'>{keysArray}</td>
+                <td className='pl-0'>{valuesArray}</td>
+            </tr>
+        )
+    });
+    return <tbody>{renderedList}</tbody>;
 }
 
 const AdminPanel: React.FC = () => {
@@ -62,6 +97,10 @@ const AdminPanel: React.FC = () => {
         }
         
     }, [selectedId, selectedSize])
+
+    useEffect(() => {
+        setSelectedSize('');
+    }, [selectedId])
 
     return (
         <>
@@ -105,6 +144,20 @@ const AdminPanel: React.FC = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="overflow-x-auto my-20 mb-4 lg:md:mx-44 sm:mx-5">
+                <table className="table">
+                    <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th>Rozmiar</th>
+                        <th>Ilość w magazynie</th>
+                    </tr>
+                    </thead>
+
+                    {/* TODO: zrobić tak żeby się odświeżała samodzielnie */}
+                    {renderTable(products)}
+                </table>
             </div>
         </>
     )
