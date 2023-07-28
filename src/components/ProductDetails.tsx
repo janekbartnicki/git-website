@@ -11,6 +11,7 @@ import { AiOutlineInfoCircle } from 'react-icons/ai';
 import ReactTextTransition, { presets } from 'react-text-transition';
 import { useDispatch } from 'react-redux';
 import { addProduct } from '../store/slices/cartSlice';
+import { BsCartXFill } from 'react-icons/bs'
 
 
 const ProductDetails: React.FC = () => {
@@ -39,11 +40,11 @@ const ProductDetails: React.FC = () => {
 
     useEffect(() => {
         if(addButtonRef.current) {
-            if(!price && !selectedSize) {
+            if(!price || !selectedSize) {
                 addButtonRef.current.disabled = true;
-            } else addButtonRef.current.disabled= false;
+            } else addButtonRef.current.disabled = inStock ? false : true;
         }
-    }, [price, selectedSize])
+    }, [price, selectedSize, inStock])
 
     // useEffect(() => {
     //     const fetchStock = async () => {
@@ -53,18 +54,27 @@ const ProductDetails: React.FC = () => {
     //     setInStock()
     // }, [selectedSize])
 
+    //NAPRAWIĆ MOŻLIWOŚC DODANIA ZA DUŻEJ ILOŚĆ PRODUKTÓW BO NIE JEST SYNC Z REDUXEM CARTEM
     useEffect(() => {
-        if(selectedSize && selectedSize >= 8) {
+        if(selectedSize && selectedSize >= 8 && id) {
             setPrice(data?.price[1]);
-        } else if(selectedSize) {
+            setInStock(getStock(id, selectedSize));
+        } else if(selectedSize && id) {
             setPrice(data?.price[0])
+            setInStock(getStock(id, selectedSize));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSize])
 
+    const getStock = (id: string | number, size: string | number): number | null => {
+        if(id && size && data) {
+            return data.inStock[size];
+        } else return null;
+    }
+
     const handleCartAdd = () => {
         //TODO: Dodanie funkcjonalności przycisku w przypadku na stanie
-        if(data && selectedSize && price) {
+        if(data && selectedSize && price && inStock && (quantity <= inStock)) {
             const cartProduct = {
                 id: data?.id,
                 name: data?.name,
@@ -133,6 +143,11 @@ const ProductDetails: React.FC = () => {
     renderTableContent();
 
     const selectSize = (): number | string => selectedSize ? selectedSize : '-';
+    const selectStock = (): number | string => {
+        if(inStock || inStock === 0) {
+            return inStock;
+        } else return '-';
+    };
 
     const hideDropdown = (event: React.MouseEvent<HTMLUListElement, MouseEvent>): void => {
         event.currentTarget.blur();
@@ -190,10 +205,20 @@ const ProductDetails: React.FC = () => {
                         <b>&nbsp;{'zł'}</b>
                     </div>
                     <p className='flex justify-end lg:md:mx-40 text-md'>Wybrany rozmiar: {selectSize()}</p>
+                    <p className='flex justify-end lg:md:mx-40 text-md'>W magazynie: {selectStock()}</p>
                     <p className='flex justify-start mt-8 text-gray-400'>
                         <span className='m-auto mx-2'><AiOutlineInfoCircle/></span>
                         Aby poznać cene najpierw wybierz rozmiar produktu.
                     </p>
+                    {
+                        inStock === 0 ? 
+                            <div className="alert alert-error mt-5">
+                                <BsCartXFill className="h-6 w-6"/>
+                                <span><b>Brak produktu na stanie.</b></span>
+                            </div>
+                      
+                        : null
+                    }
                     <div className='flex my-6 flex-wrap justify-center lg:md:justify-start'>
                         <div className="dropdown my-5">
                             <label tabIndex={0} className="btn m-1">Wybierz Rozmiar<IoMdArrowDropdown/></label>
@@ -202,7 +227,7 @@ const ProductDetails: React.FC = () => {
                             </ul>
                         </div>
                         <div className='flex mt-6 flex-wrap justify-center lg:md:justify-start'>
-                            <input type="number" min={1} value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="input input-bordered w-24 mx-5" /><p className='my-2'> szt.</p>
+                            <input type="number" min={1} max={inStock ? inStock : 1} value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="input input-bordered w-24 mx-5" /><p className='my-2'> szt.</p>
                         </div>
                         <button className='btn my-5 transition delay-150 bg-[#e83b3b] text-white mx-16  w-40 text-md hover:text-black' ref={addButtonRef} onClick={handleCartAdd}>
                             DO KOSZYKA
