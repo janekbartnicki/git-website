@@ -45,8 +45,8 @@ const App = () => {
         <Route path='/konto' element={<UserAccount/>}/>
         <Route path='/reset' element={<PasswordReset/>}/>
         <Route path='/kontakt' element={<Contact/>}/>
-        {/* { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null } */}
-        <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/>
+        { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null }
+        {/* <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> */}
       </Route>
     )
   )

@@ -4,84 +4,23 @@ import { Product, fetchProducts } from '../utils';
 import { doc, setDoc } from 'firebase/firestore';
 import { firestore } from '../firebase';
 
-let products = await fetchProducts();
-
-const convertToSelectId = (): SelectItem[] => {
-    const productsArray = products.map(product => {
-        return {value: String(product.id), label: product.name};
-    });
-
-    return productsArray;
-}
-
-const convertToSelectSize = (id: string | null): (SelectItem | string)[] => {
-    if(id && products[Number(id) - 1]) {
-        const productsArray = products[Number(id) - 1].spec.sizes.map(size => {
-                return {value: String(size), label: String(size)};
-            }
-        )
-        return productsArray;
-    } else return ['',''];
-}
-
-const handleStockSubmit = async (selectedId: string, selectedSize: string, inStock: string): Promise<void> => {
-    products = await fetchProducts();
-    await setDoc(doc(firestore,  'products', `${selectedId}`), {
-        ...products[Number(selectedId) - 1],
-        inStock: {
-            ...products[Number(selectedId) - 1].inStock,
-            [selectedSize]: Number(inStock)
-        }
-    })
-    products = await fetchProducts();
-}
-
-const getStock = (id: string | number, size: string | number): number | null => {
-    if(id && size && products[Number(id) - 1]) {
-        return products[Number(id) - 1].inStock[size];
-    } else return null;
-}
-
-const renderTable = (products: Product[]): JSX.Element => {
-    const renderedList = products.map((product, index) => {
-        const { inStock, name } = product;
-        const stockKeys = Object.keys(inStock);
-        const stockValues = Object.values(inStock);
-
-        const keysArray = stockKeys.map((key, i) => (
-            <React.Fragment key={`key_${index}_${i}`}>
-                <p className='text-center'>{key}</p>
-                <br/>
-                <hr/>
-            </React.Fragment>
-        ));
-
-        const valuesArray = stockValues.map((value, i) => (
-            <React.Fragment key={`value_${index}_${i}`}>
-                <p className='text-center'>{value}</p>
-                <br/>
-                <hr/>
-            </React.Fragment>
-        ));
-
-        return (
-            <tr key={`row_${index}`}>
-                <th>{name}</th>
-                <td className='pr-0 border-r-2 border-gray-200'>{keysArray}</td>
-                <td className='pl-0'>{valuesArray}</td>
-            </tr>
-        )
-    });
-    return <tbody>{renderedList}</tbody>;
-}
-
 const AdminPanel: React.FC = () => {
+    const [products, setProducts] = useState<Product[]>([]);
     const [selectedId, setSelectedId] = useState<string | null>('');
     const [selectedSize, setSelectedSize] = useState<string | null>('');
     const [inStock, setInStock] = useState<string | null>('');
 
     const sizeInputRef = useRef<HTMLInputElement | null>(null);
     const stockInputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        const fetchInitialProducts = async () => {
+            const initialProducts = await fetchProducts();
+            setProducts(initialProducts);
+        };
+
+        fetchInitialProducts();
+    }, []);
 
     useEffect(() => {
         if(sizeInputRef.current) {
@@ -101,6 +40,79 @@ const AdminPanel: React.FC = () => {
     useEffect(() => {
         setSelectedSize('');
     }, [selectedId])
+
+    const convertToSelectId = (): SelectItem[] => {
+        const productsArray = products.map(product => {
+            return {value: String(product.id), label: product.name};
+        });
+    
+        return productsArray;
+    }
+    
+    const convertToSelectSize = (id: string | null): (SelectItem | string)[] => {
+        if(id && products[Number(id) - 1]) {
+            const productsArray = products[Number(id) - 1].spec.sizes.map(size => {
+                    return {value: String(size), label: String(size)};
+                }
+            )
+            return productsArray;
+        } else return ['',''];
+    }
+    
+    const handleStockSubmit = async (selectedId: string, selectedSize: string, inStock: string): Promise<void> => {
+        const updatedProducts = await fetchProducts();
+        setProducts(updatedProducts);
+
+        await setDoc(doc(firestore,  'products', `${selectedId}`), {
+            ...updatedProducts[Number(selectedId) - 1],
+            inStock: {
+                ...updatedProducts[Number(selectedId) - 1].inStock,
+                [selectedSize]: Number(inStock)
+            }
+        })
+
+        const updatedProductsAfterSubmit = await fetchProducts();
+        setProducts(updatedProductsAfterSubmit);
+    }
+    
+    const getStock = (id: string | number, size: string | number): number | null => {
+        if(id && size && products[Number(id) - 1]) {
+            return products[Number(id) - 1].inStock[size];
+        } else return null;
+    }
+    
+    const renderTable = (products: Product[]): JSX.Element => {
+        const renderedList = products.map((product, index) => {
+            const { inStock, name } = product;
+            const stockKeys = Object.keys(inStock);
+            const stockValues = Object.values(inStock);
+    
+            const keysArray = stockKeys.map((key, i) => (
+                <React.Fragment key={`key_${index}_${i}`}>
+                    <p className='text-center'>{key}</p>
+                    <br/>
+                    <hr/>
+                </React.Fragment>
+            ));
+    
+            const valuesArray = stockValues.map((value, i) => (
+                <React.Fragment key={`value_${index}_${i}`}>
+                    <p className='text-center'>{value}</p>
+                    <br/>
+                    <hr/>
+                </React.Fragment>
+            ));
+    
+            return (
+                <tr key={`row_${index}`}>
+                    <th>{name}</th>
+                    <td className='pr-0 border-r-2 border-gray-200'>{keysArray}</td>
+                    <td className='pl-0'>{valuesArray}</td>
+                </tr>
+            )
+        });
+        return <tbody>{renderedList}</tbody>;
+    }
 
     return (
         <>
