@@ -1,5 +1,5 @@
 import './index.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import RootLayout from './RootLayout';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -8,8 +8,8 @@ import Shop from './components/Shop';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
 import About from './components/About';
-import store from './store';
-import { Provider } from 'react-redux';
+import { AppDispatch } from './store';
+import { useDispatch } from 'react-redux';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import RegisteredPage from './components/RegisteredPage';
@@ -20,9 +20,17 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { getUser } from './utils';
 import AdminPanel from './components/AdminPanel';
+import { fetchProductsData } from './store/slices/productsSlice';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);  
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchProductsData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   onAuthStateChanged(auth, async user => {
     if(user?.uid) {
@@ -46,16 +54,11 @@ const App = () => {
         <Route path='/reset' element={<PasswordReset/>}/>
         <Route path='/kontakt' element={<Contact/>}/>
         { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null }
-        {/* <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> */}
       </Route>
     )
   )
 
-  return (
-    <Provider store={store}>
-      <RouterProvider router={router}/>
-    </Provider>
-  )
+  return <RouterProvider router={router}/>
 }
 
 export default App;

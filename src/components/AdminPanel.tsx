@@ -3,6 +3,8 @@ import { Input, Select, SelectItem } from '@mantine/core';
 import { Product, fetchProducts } from '../utils';
 import { doc, setDoc } from 'firebase/firestore';
 import { firestore } from '../firebase';
+import { useDispatch } from 'react-redux';
+import { updateProducts } from '../store/slices/productsSlice';
 
 const AdminPanel: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -12,6 +14,8 @@ const AdminPanel: React.FC = () => {
 
     const sizeInputRef = useRef<HTMLInputElement | null>(null);
     const stockInputRef = useRef<HTMLInputElement | null>(null);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchInitialProducts = async () => {
@@ -72,6 +76,7 @@ const AdminPanel: React.FC = () => {
         })
 
         const updatedProductsAfterSubmit = await fetchProducts();
+        dispatch(updateProducts(updatedProductsAfterSubmit));
         setProducts(updatedProductsAfterSubmit);
     }
     

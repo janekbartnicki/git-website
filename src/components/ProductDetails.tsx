@@ -1,7 +1,7 @@
 import { useEffect , useState, useRef } from 'react';
 import { useParams} from "react-router";
 import { Link  } from 'react-router-dom';
-import { Product, fetchProducts } from '../utils';
+import { Product } from '../utils';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { GrPrevious, GrNext } from 'react-icons/gr';
@@ -9,9 +9,10 @@ import { IoMdArrowDropdown } from 'react-icons/io';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
 import ReactTextTransition, { presets } from 'react-text-transition';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addProduct } from '../store/slices/cartSlice';
 import { BsCartXFill } from 'react-icons/bs'
+import { AppDispatch, RootState } from '../store';
 
 
 const ProductDetails: React.FC = () => {
@@ -25,18 +26,27 @@ const ProductDetails: React.FC = () => {
 
     const addButtonRef = useRef<HTMLButtonElement>(null)
 
-    const dispatch = useDispatch();
+    const productsState = useSelector<RootState, Product[]>(state => state.products.data)
+    const dispatch = useDispatch<AppDispatch>();
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const response = await fetchProducts();
+    //         const product = response.find(product => product.id === Number(id));
+    //         setData(product);
+    //     }
+
+    //     fetchData();
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetchProducts();
-            const product = response.find(product => product.id === Number(id));
-            setData(product);
+        if(productsState && Array.isArray(productsState)){
+            const product = productsState.find(product => product.id === Number(id));
+        setData(product);
         }
-
-        fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [productsState])
 
     useEffect(() => {
         if(addButtonRef.current) {
