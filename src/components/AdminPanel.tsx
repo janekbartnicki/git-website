@@ -38,7 +38,7 @@ const AdminPanel: React.FC = () => {
                 stockInputRef.current.value = String(getStock(selectedId, selectedSize))
             } else stockInputRef.current.disabled = true;
         }
-        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedId, selectedSize])
 
     useEffect(() => {
@@ -54,8 +54,10 @@ const AdminPanel: React.FC = () => {
     }
     
     const convertToSelectSize = (id: string | null): (SelectItem | string)[] => {
-        if(id && products[Number(id) - 1]) {
-            const productsArray = products[Number(id) - 1].spec.sizes.map(size => {
+        const product = id ? products.find(product => product.id === Number(id)) : null;
+
+        if(id && product) {
+            const productsArray = product.spec.sizes.map(size => {
                     return {value: String(size), label: String(size)};
                 }
             )
@@ -67,13 +69,17 @@ const AdminPanel: React.FC = () => {
         const updatedProducts = await fetchProducts();
         setProducts(updatedProducts);
 
-        await setDoc(doc(firestore,  'products', `${selectedId}`), {
-            ...updatedProducts[Number(selectedId) - 1],
-            inStock: {
-                ...updatedProducts[Number(selectedId) - 1].inStock,
-                [selectedSize]: Number(inStock)
-            }
-        })
+        const updatedProduct = selectedId ? products.find(product => product.id === Number(selectedId)) : null;
+
+        if(updatedProduct){
+            await setDoc(doc(firestore,  'products', `${selectedId}`), {
+                ...updatedProduct,
+                inStock: {
+                    ...updatedProduct.inStock,
+                    [selectedSize]: Number(inStock)
+                }
+            })
+        }
 
         const updatedProductsAfterSubmit = await fetchProducts();
         dispatch(updateProducts(updatedProductsAfterSubmit));
@@ -81,8 +87,10 @@ const AdminPanel: React.FC = () => {
     }
     
     const getStock = (id: string | number, size: string | number): number | null => {
-        if(id && size && products[Number(id) - 1]) {
-            return products[Number(id) - 1].inStock[size];
+        const product = id ? products.find(product => product.id === Number(id)) : null;
+
+        if(id && size && product) {
+            return product.inStock[size];
         } else return null;
     }
     

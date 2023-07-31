@@ -22,6 +22,21 @@ const productsSlice = createSlice({
     reducers: {
         updateProducts(state, action: PayloadAction<Product[]>) {
             state.data = action.payload;
+        },
+        removeLocalProduct({data}, {payload}: PayloadAction<{id: number, size: number, quantity: number}>) {
+            const product = payload.id ? data.find(product => product.id === Number(payload.id)) : null;
+
+            if(product) {
+                product.inStock[payload.size] = (product.inStock[payload.size] > 0) ? product.inStock[payload.size] - payload.quantity : 0;
+            }
+
+            data = data.map(item => {
+                if(item.id === payload.id && product){
+                    return product;
+                } else {
+                    return item;
+                }
+            })
         }
     },
     extraReducers: builder => {
@@ -40,4 +55,4 @@ const productsSlice = createSlice({
 })
 
 export default productsSlice;
-export const { updateProducts } = productsSlice.actions;
+export const { updateProducts, removeLocalProduct } = productsSlice.actions;

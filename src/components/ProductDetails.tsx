@@ -12,7 +12,7 @@ import ReactTextTransition, { presets } from 'react-text-transition';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProduct } from '../store/slices/cartSlice';
 import { BsCartXFill } from 'react-icons/bs'
-import { AppDispatch, RootState } from '../store';
+import store, { AppDispatch, RootState } from '../store';
 
 
 const ProductDetails: React.FC = () => {
@@ -83,8 +83,23 @@ const ProductDetails: React.FC = () => {
     }
 
     const handleCartAdd = () => {
+        //checking with cart status to prevent adding too much products
+
+        const currentCartStatus = store.getState().cart;
+        let isQuantityExceeded = false;
+        
+        if(currentCartStatus && inStock) {
+            currentCartStatus.forEach(item => {
+                if(item.id === Number(id) && item.size === selectedSize){
+                    if(item.quantity + quantity > inStock) {
+                        isQuantityExceeded = true;
+                    }
+                }
+            })
+        }
+
         //TODO: Dodanie funkcjonalności przycisku w przypadku na stanie
-        if(data && selectedSize && price && inStock && (quantity <= inStock)) {
+        if(data && selectedSize && price && inStock && (quantity <= inStock) && !isQuantityExceeded) {
             const cartProduct = {
                 id: data?.id,
                 name: data?.name,
