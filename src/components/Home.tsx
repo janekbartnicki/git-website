@@ -1,5 +1,5 @@
 import ShortAbout from './ShortAbout';
-import { renderProductsCards, fetchProducts, fetchImages } from '../utils';
+import { renderProductsCards, fetchProducts } from '../utils';
 import Banner from './Banner';
 
 // const response = await axios.get('/data/products.json');
@@ -8,7 +8,7 @@ import Banner from './Banner';
 
 
 const products = await fetchProducts();
-const photos = await fetchImages();
+// const photos = await fetchImages();
 
 const Home: React.FC = () => {
     return (
