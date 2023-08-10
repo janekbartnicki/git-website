@@ -17,10 +17,11 @@ const cartSlice = createSlice({
         addProduct: (state, action: PayloadAction<CartProduct>): void => {
             const { id, size } = action.payload;
             const foundProduct = state.find(product => product.id === id && product.size === size);
-      
-            if (foundProduct) {
+
+            
+            if (foundProduct && action.payload.quantity > 0) {
               foundProduct.quantity += action.payload.quantity;
-            } else {
+            } else if(action.payload.quantity > 0){
               state.push({ ...action.payload, quantity: action.payload.quantity });
             }
           },
