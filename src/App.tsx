@@ -7,7 +7,6 @@ import Home from './components/Home';
 import Shop from './components/Shop';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
-import About from './components/About';
 import { AppDispatch } from './store';
 import { useDispatch } from 'react-redux';
 import SignIn from './components/SignIn';
@@ -46,7 +45,6 @@ const App = () => {
         <Route path='/sklep' element={<Shop/>}/>
         <Route path='/sklep/produkt/:id' element={<ProductDetails/>}/>
         <Route path='/koszyk' element={<Cart/>}/>
-        <Route path='/o_nas' element={<About/>}/>
         <Route path='/logowanie' element={<SignIn/>}/>
         <Route path='/rejestracja' element={<SignUp/>}/>
         <Route path='/zarejestrowano' element={<RegisteredPage/>}/>
