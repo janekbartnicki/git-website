@@ -20,11 +20,19 @@ import { auth } from './firebase';
 import { getUser } from './utils';
 import AdminPanel from './components/AdminPanel';
 import { fetchProductsData } from './store/slices/productsSlice';
+import Loading from './components/Loading';
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);  
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, [])
 
   useEffect(() => {
     dispatch(fetchProductsData());
@@ -51,13 +59,12 @@ const App = () => {
         <Route path='/konto' element={<UserAccount/>}/>
         <Route path='/reset' element={<PasswordReset/>}/>
         <Route path='/kontakt' element={<Contact/>}/>
-        {/* { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null } */}
-        <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/>
+        { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null }
       </Route>
     )
   )
 
-  return <RouterProvider router={router}/>
+  return loading ? <Loading/> : <RouterProvider router={router}/>;
 }
 
 export default App;

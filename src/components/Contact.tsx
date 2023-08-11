@@ -2,7 +2,6 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../firebase";
 import { AiOutlineFilePdf, AiOutlineMail } from 'react-icons/ai';
 import { TiSocialInstagram } from "react-icons/ti";
-import { useState } from "react";
 
 const url = await getDownloadURL(ref(storage, 'regulamin.pdf'));
 

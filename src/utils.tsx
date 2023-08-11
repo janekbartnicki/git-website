@@ -1,11 +1,9 @@
-import axios from 'axios';
 import { useWindowScroll } from '@mantine/hooks';
 import { useEffect } from 'react';
 import { storage, firestore } from './firebase';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import Card from "./components/Card";
-import { Link } from 'react-router-dom';
 
 // const PRODUCTS_URL = '/data/products.json';
 
@@ -144,7 +142,7 @@ export const fetchImages = async (endpoint = 'images/'): Promise<string[] | stri
 
 
 export const AutoScroll: React.FC = () => {
-    const [scroll, scrollTo] = useWindowScroll();
+    const [_ , scrollTo] = useWindowScroll();
     const location = window.location.href;
 
     useEffect((): void => {

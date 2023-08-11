@@ -1,6 +1,8 @@
 const Loading: React.FC = () => {
-    return <div className="flex items-center align-middle">
-        <span className="loading loading-spinner loading-md"></span>
+    return <div className="text-center mt-72">
+        <h1 className="text-xl text-bold">Witamy!</h1><br/>
+        <span className="loading loading-spinner loading-lg"></span><br/>
+        <p className="mt-5">Trwa ładowanie storny...</p>
     </div>
 }
 
