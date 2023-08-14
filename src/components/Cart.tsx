@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CartProduct, clearCart, removeProduct } from '../store/slices/cartSlice';
 import ReactTextTransition, { presets } from 'react-text-transition';
 import { GrNext } from 'react-icons/gr';
+import { Link } from 'react-router-dom';
 
 const Cart: React.FC = () => {
     const cartState = useSelector<RootState, CartProduct[]>(state => state.cart);
@@ -34,7 +35,9 @@ const Cart: React.FC = () => {
                 sum += item.price * item.quantity;
                 return (
                     <tr key={itemsCount}>
-                        <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/><p className='m-5'>{item.name}</p></td>
+                        <td className='flex justify-start'><img className='w-8 h-8 m-5' src='/images/icon_logo.png'/>
+                            <p className='m-5 hover:underline'><Link to={`/sklep/produkt/${item.id}`}>{item.name}</Link></p>
+                        </td>
                         <td>{item.size}</td>
                         <td>{item.quantity} szt.</td>
                         <td>{item.price * item.quantity} zł</td>
