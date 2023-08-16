@@ -1,7 +1,7 @@
 import { useEffect , useState, useRef } from 'react';
 import { useParams} from "react-router";
 import { Link  } from 'react-router-dom';
-import { Product } from '../utils';
+import { Product, fetchImages } from '../utils';
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 import { GrPrevious, GrNext } from 'react-icons/gr';
@@ -14,15 +14,16 @@ import { addProduct } from '../store/slices/cartSlice';
 import { BsCartXFill } from 'react-icons/bs'
 import store, { AppDispatch, RootState } from '../store';
 
-
 const ProductDetails: React.FC = () => {
     const {id} = useParams();
+
 
     const [data, setData] = useState<Product | undefined>();
     const [price, setPrice] = useState<number | undefined>(0);
     const [selectedSize, setSelectedSize] = useState<number | null>(null);
     const [quantity, setQuantity] = useState<number>(1);
     const [inStock, setInStock] = useState<number | null>(null);
+    const [photos, setPhotos] = useState<string[] | string | null>(null);
 
     const addButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -75,6 +76,15 @@ const ProductDetails: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedSize])
+
+    useEffect(() => {
+        const fetchPhotos = async (): Promise<void> => {
+            const images = await fetchImages(`/images/${id}`);
+            setPhotos(images);
+        }
+
+        fetchPhotos();
+    }, [id])
 
     const getStock = (id: string | number, size: string | number): number | null => {
         if(id && size && data) {
@@ -196,11 +206,15 @@ const ProductDetails: React.FC = () => {
                         naturalSlideHeight={24}
                         totalSlides={3}
                     >
-                        <Slider className='mx-5 my-2 rounded-lg'>
-                            <Slide index={0}><img className='w-auto h-auto m-auto' src="/images/icon_logo.png" alt="" /></Slide>
-                            <Slide index={1}><img className='w-auto h-auto m-auto' src="/images/icon_logo.png" alt="" /></Slide>
-                            <Slide index={2}><img className='w-auto h-auto m-auto' src="/images/icon_logo.png" alt="" /></Slide>
-                        </Slider>
+                        {
+                            photos ? 
+                            <Slider className='mx-5 my-2 rounded-lg'>
+                                <Slide index={0}><img className='w-auto h-auto m-auto' src={photos && photos[0] ? photos[0] : '/images/icon_logo.png'} alt="" /></Slide>
+                                <Slide index={1}><img className='w-auto h-auto m-auto' src={photos && photos[1] ? photos[1] : '/images/icon_logo.png'} alt="" /></Slide>
+                                <Slide index={2}><img className='w-auto h-auto m-auto' src={photos && photos[3] ? photos[2] : '/images/icon_logo.png'} alt="" /></Slide>
+                            </Slider> : <div className='flex justify-center items-center align-middle'>
+                                <span className="loading loading-spinner loading-lg text-center my-52"></span></div>
+                        }
                         <div className='flex justify-center'>
                             <ButtonBack>
                                 <GrPrevious className="w-10 h-10 m-5"/>
