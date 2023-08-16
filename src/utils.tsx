@@ -31,41 +31,6 @@ export interface FirestoreUser {
     isAdmin?: boolean;
 }
 
-export const renderProductsCards = (products: Product[], limit?: number): JSX.Element[] => {
-    const productsArray: JSX.Element[] = [];
-    if(!limit) {
-        for(const {id, name, model, mainImg, isNew} of products) {
-            productsArray.push(
-                    <Card 
-                        key={id}
-                        header={name}
-                        desc={model}
-                        img={mainImg}
-                        altImg={name}
-                        isNew={isNew}
-                        link={`/sklep/produkt/${id}`}
-                    />
-                )
-        }
-    } else {
-        for(let i = 0; i < limit; i++) {
-            const {id, name, model, mainImg, isNew} = products[i];
-            productsArray.push(
-                <Card 
-                    key={id}
-                    header={name}
-                    desc={model}
-                    img={mainImg}
-                    altImg={name}
-                    isNew={isNew}
-                    link={`/sklep/produkt/${id}`}
-                />
-            )
-        }
-    }
-
-    return productsArray;
-}
 
 //Fetching from public/data file not from external database
 
@@ -151,4 +116,44 @@ export const AutoScroll: React.FC = () => {
     }, [location]);
 
     return null;
+}
+
+const mainImages = await fetchImages('/images/main_images');
+//320x240 scale
+console.log(mainImages)
+
+export const renderProductsCards = (products: Product[], limit?: number): JSX.Element[] => {
+    const productsArray: JSX.Element[] = [];
+    if(!limit) {
+        for(const {id, name, model, isNew} of products) {
+            productsArray.push(
+                    <Card 
+                        key={id}
+                        header={name}
+                        desc={model}
+                        img={mainImages[id - 1] ? mainImages[id - 1] : '/images/icon_logo.png'}
+                        altImg={name}
+                        isNew={isNew}
+                        link={`/sklep/produkt/${id}`}
+                    />
+                )
+        }
+    } else {
+        for(let i = 0; i < limit; i++) {
+            const {id, name, model, isNew} = products[i];
+            productsArray.push(
+                <Card 
+                    key={id}
+                    header={name}
+                    desc={model}
+                    img={mainImages[id - 1] ? mainImages[id - 1] : '/images/icon_logo.png'}
+                    altImg={name}
+                    isNew={isNew}
+                    link={`/sklep/produkt/${id}`}
+                />
+            )
+        }
+    }
+
+    return productsArray;
 }
