@@ -16,7 +16,7 @@ const firebaseConfig = {
   projectId: "git-website-database",
   storageBucket: "git-website-database.appspot.com",
   messagingSenderId: "155283613049",
-  appId: "1:155283613049:web:06989fb937fdfab32e7ba8",
+  appId: import.meta.env.VITE_FIREBASE_KEY,
   measurementId: "G-KSGPJ2KSRQ"
 };
 
