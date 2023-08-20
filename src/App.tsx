@@ -41,8 +41,9 @@ const App = () => {
 
   onAuthStateChanged(auth, async user => {
     if(user?.uid) {
-      const {isAdmin} = await getUser(user.uid);
-      isAdmin ? setIsAdmin(true) : setIsAdmin(false);
+      const userDoc = await getUser(user.uid);
+      const isAdmin = userDoc && userDoc.isAdmin === true;
+      setIsAdmin(isAdmin);
     }
   })
 
