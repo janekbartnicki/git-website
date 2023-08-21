@@ -22,6 +22,7 @@ export interface Product {
     mainImg: string;
     photos: string;
     isNew: boolean;
+    stripeIds: {[key: string]: string}
 }
 
 export interface FirestoreUser {
