@@ -24,3 +24,22 @@ dist-ssr
 *.sw?
 
 .env
+
+# Firebase configuration files
+.firebase
+firestore.rules
+storage.rules
+
+# Firebase development files
+# firebase.json
+# .firebaserc
+
+# Firebase Functions
+functions/node_modules/
+functions/.runtimeconfig.json
+
+# Firebase Hosting
+# public/
+
+# Firebase Emulators
+.emulators

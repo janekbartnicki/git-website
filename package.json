@@ -14,6 +14,8 @@
     "@mantine/hooks": "^6.0.15",
     "@reduxjs/toolkit": "^1.9.5",
     "@stripe/firestore-stripe-payments": "^0.0.6",
+    "@stripe/react-stripe-js": "^2.1.2",
+    "@stripe/stripe-js": "^2.1.0",
     "@types/react-router": "^5.1.20",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
@@ -25,7 +27,8 @@
     "react-pdf": "^7.3.3",
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.0",
-    "react-text-transition": "^3.1.0"
+    "react-text-transition": "^3.1.0",
+    "stripe": "^13.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

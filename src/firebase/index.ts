@@ -11,12 +11,12 @@ import { getStripePayments } from "@stripe/firestore-stripe-payments";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCbJKwczMd5jntY957cfFbWdggDwFoENQs",
+  apiKey: import.meta.env.VITE_FIREBASE_KEY,
   authDomain: "git-website-database.firebaseapp.com",
   projectId: "git-website-database",
   storageBucket: "git-website-database.appspot.com",
   messagingSenderId: "155283613049",
-  appId: import.meta.env.VITE_FIREBASE_KEY,
+  appId: '1:570543864038:web:c6f29609071e0b0ee62327',
   measurementId: "G-KSGPJ2KSRQ"
 };
 
