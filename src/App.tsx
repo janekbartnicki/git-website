@@ -21,6 +21,8 @@ import { getUser } from './utils';
 import AdminPanel from './components/AdminPanel';
 import { fetchProductsData } from './store/slices/productsSlice';
 import Loading from './components/Loading';
+import PaymentSuccess from './components/PaymentSuccess';
+import PaymentFail from './components/PaymentFail';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -60,6 +62,8 @@ const App = () => {
         <Route path='/konto' element={<UserAccount/>}/>
         <Route path='/reset' element={<PasswordReset/>}/>
         <Route path='/kontakt' element={<Contact/>}/>
+        <Route path='/platnosc/sukces' element={<PaymentSuccess/>}/>
+        <Route path='/platnosc/niepowodzenie' element={<PaymentFail/>}/>
         { isAdmin ? <Route path='/konto/admin/admin_panel' element={<AdminPanel/>}/> : null }
       </Route>
     )
