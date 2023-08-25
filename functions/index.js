@@ -1,21 +1,19 @@
 /* eslint-disable */
 
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp();
 
 exports.createStripeCheckout = functions.region('europe-central2').https.onCall(async (data, context) => {
   const stripe = require("stripe")(functions.config().stripe.secret_key);
 
-  const SHIPPING_COST = 1500;
+  let METADATA_CART_STRING = JSON.stringify(data.cart);
 
-  // const cartInfo = data.cart.map(item => {
-  //   return {
-  //     id: item.id,
-  //     name: item.name,
-  //     size: item.size,
-  //     price: item.price,
-  //     quantity: item.quantity
-  //   }
+  // data.cart.forEach(item => {
+  //   METADATA_CART_STRING += `${item.id},${item.size},${item.quantity};`;
   // })
+
+  const SHIPPING_COST = 1500;
 
   const cartItems = data.cart.map(item => {
     return {
@@ -30,30 +28,19 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
     }
   })
 
-  // cartItems.push({
-  //   quantity: 1,
-  //   price_data: {
-  //     currency: "pln",
-  //     unit_amount: SHIPPING_COST,
-  //     product_data: {
-  //       name: "Koszt przesyłki"
-  //     }
-  //   }
-  // })
-
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["p24", "card"],
     mode: "payment",
     success_url: "http://localhost:5173/platnosc/sukces",
     cancel_url: "http://localhost:5173/platnosc/niepowodzenie",
     line_items: cartItems,
+    metadata: {
+      cart_info: METADATA_CART_STRING,
+    },
     shipping_address_collection: {
       allowed_countries: ['PL'],
     },
     allow_promotion_codes: true,
-    metadata: {
-      test: 'test'
-    },
     shipping_options: [
       {
         shipping_rate_data: {
@@ -81,4 +68,66 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
   return {
     id: session.id,
   };
+})
+
+exports.stripeWebhook = functions.region('europe-central2').https.onRequest(async (req, res) => {
+  const stripe = require("stripe")(functions.config().stripe.secret_key);
+  let event;
+
+  // const parseMetadata = (metadataString) => {
+  //   const items = metadataString.split(';');
+  //   const arr = items.map(item => {
+  //     const splitted = item.split(",");
+  //     if(splitted[0] && splitted[1] && splitted[2]) {
+  //       return {
+  //         id: splitted[0],
+  //         size: splitted[1],
+  //         quantity: splitted[2]
+  //       }
+  //     } else return;
+  //   })
+
+  //   arr.pop();
+  //   return arr;
+  // }
+
+  try {
+    const webhookSecret = functions.config().stripe.webhook_secret_key;
+
+    event = stripe.webhooks.constructEvent(
+      req.rawBody,
+      req.headers["stripe-signature"],
+      webhookSecret,
+    );
+  } catch(error) {
+    console.error("Webhook signature verification failed.", error.message);
+    return res.sendStatus(400);
+  }
+
+  switch(event.type) {
+    case 'payment_intent.succeeded': {
+      // const paymentIntent = event.data.object;
+      console.log('payment success');
+
+      // const cartItems = parseMetadata(paymentIntent.metadata.cart_info);
+
+      // console.log(cartItems)
+      // const db = admin.firestore();
+      // const batch = db.batch();
+
+      // for (const cartItem of cartItems) {
+      //   const productRef = db.collection('products').doc(cartItem.id);
+      //   batch.update(productRef, {
+      //     [`inStock.${cartItem.size}`]: admin.firestore.FieldValue.increment(-cartItem.quantity),
+      //   });
+      // }
+
+      // await batch.commit();
+
+      res.sendStatus(200);
+      break;
+    }
+    default:
+      console.log(`Unhandled event type ${event.type}.`);
+  }
 })
