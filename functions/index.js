@@ -7,6 +7,16 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
 
   const SHIPPING_COST = 1500;
 
+  // const cartInfo = data.cart.map(item => {
+  //   return {
+  //     id: item.id,
+  //     name: item.name,
+  //     size: item.size,
+  //     price: item.price,
+  //     quantity: item.quantity
+  //   }
+  // })
+
   const cartItems = data.cart.map(item => {
     return {
       quantity: item.quantity,
@@ -41,6 +51,9 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
       allowed_countries: ['PL'],
     },
     allow_promotion_codes: true,
+    metadata: {
+      test: 'test'
+    },
     shipping_options: [
       {
         shipping_rate_data: {

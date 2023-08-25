@@ -116,7 +116,6 @@ const ProductDetails: React.FC = () => {
                 size: selectedSize,
                 price,
                 quantity,
-                stripeId: data.stripeIds[selectedSize]
             }
     
             dispatch(addProduct(cartProduct));

@@ -19,10 +19,7 @@ export interface Product {
         sizes: number[];
     },
     price: number[];
-    mainImg: string;
-    photos: string;
     isNew: boolean;
-    stripeIds: {[key: string]: string}
 }
 
 export interface FirestoreUser {

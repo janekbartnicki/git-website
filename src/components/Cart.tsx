@@ -1,7 +1,7 @@
 import { RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { CartProduct, clearCart, removeProduct } from '../store/slices/cartSlice';
-// import ReactTextTransition, { presets } from 'react-text-transition';
+import ReactTextTransition, { presets } from 'react-text-transition';
 import { GrNext } from 'react-icons/gr';
 import { Link } from 'react-router-dom';
 import { fetchImages, fetchProducts } from '../utils';
@@ -153,8 +153,10 @@ const Cart: React.FC = () => {
                     </h3>
                     <div className="form-control lg:md:w-96 w-full">
                         <p>
+                            <br/>
                             Koszt wysyłki wynosi <b>15 zł</b>.<br/>
-                            <span className='text-slate-400'>Dane adresowe podawane są w procesie płatności po kliknięciu przycisku "przejdź do płatności".</span>
+                            <span className='text-slate-400'>Dane adresowe podawane są w procesie płatności po kliknięciu przycisku "przejdź do płatności".</span><br/><br/>
+                            Jeżeli posiadasz <b>kod promocyjny</b> będzie on możliwy do wprowadzenia po kliknięciu przycisku "przejdź do płatonści".
                         </p>
                         {/* <label className="label">
                             <span className="label-text">Miasto</span>
@@ -213,8 +215,7 @@ const Cart: React.FC = () => {
                         <div className="stat overflow-hidden">
                             <div className="stat-title">Łączna kwota:</div>
                             <div className="stat-value">
-                                {/* <ReactTextTransition springConfig={presets.wobbly}>{sum} PLN</ReactTextTransition>? */}
-                                {sum} PLN
+                                <ReactTextTransition springConfig={presets.wobbly}>{sum} PLN</ReactTextTransition>
                             </div>
                             <div className="stat-desc">za {amountOfItems} szt.</div>
                             <div className='stat-desc'>+ 15 zł wysyłka</div>
@@ -229,12 +230,12 @@ const Cart: React.FC = () => {
                     </button>
                 </div>
             </div>
-            <div className='flex justify-center'>
-            <ul className="steps">
-                <li className={`step ${cartState.length ? 'step-neutral' : ''}`}>Wybierz Produkty</li>
-                <li className="step">Płatność</li>
-                <li className="step">Przyjęcie Zamówienia</li>
-            </ul>
+            <div className='flex justify-center mx-5'>
+                <ul className="steps">
+                    <li className={`step ${cartState.length ? 'step-neutral' : ''}`}>Wybierz Produkty</li>
+                    <li className="step">Płatność</li>
+                    <li className="step">Przyjęcie Zamówienia</li>
+                </ul>
             </div>
         </>
     )
