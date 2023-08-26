@@ -43,6 +43,8 @@ const stockDoubleCheck = async (cartProducts: CartProduct[]): Promise<boolean> =
 const Cart: React.FC = () => {
     const cartState = useSelector<RootState, CartProduct[]>(state => state.cart);
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+    const [error, setError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
     // const [city, setCity] = useState<string>('');
     // const [street, setStreet] = useState<string>('');
     // const [houseNumber, setHouseNumber] = useState<string>('');
@@ -56,7 +58,13 @@ const Cart: React.FC = () => {
     const handleCheckout = async () => {
         if(!cartState.length) return;
         if(!(await stockDoubleCheck(cartState))) {
-            console.error('Brak produktu na stanie magazynowym'); //TODO wyrzucanie błędu na stornie 
+            setErrorMessage('Brak produktu na stanie magazynowym. Wyczyść koszyk i spróbuj jeszcze raz.');
+            setError(true);
+            return;
+        }
+        if(cartState.length > 5) {
+            setErrorMessage('Ilość różnych pozycji w koszyku nie może przekroczyć pięciu. Rekomendujemy rozdzielić zamówenia na parę osobnych.');
+            setError(true);
             return;
         }
 
@@ -136,6 +144,7 @@ const Cart: React.FC = () => {
                 </table>
                 {renderEmpty()}
             </div>
+            <div className='text-center text-red-600'>{error && errorMessage ? errorMessage : null}</div>
             <div className='flex md:lg:justify-end justify-center mx-48 my-5'>
                 <button 
                     className='btn hover:text-black'

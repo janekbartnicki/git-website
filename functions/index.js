@@ -9,10 +9,6 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
 
   let METADATA_CART_STRING = JSON.stringify(data.cart);
 
-  // data.cart.forEach(item => {
-  //   METADATA_CART_STRING += `${item.id},${item.size},${item.quantity};`;
-  // })
-
   const SHIPPING_COST = 1500;
 
   const cartItems = data.cart.map(item => {
@@ -36,6 +32,11 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
     line_items: cartItems,
     metadata: {
       cart_info: METADATA_CART_STRING,
+    },
+    payment_intent_data: {
+      metadata: {
+        cart_info: METADATA_CART_STRING,
+      },
     },
     shipping_address_collection: {
       allowed_countries: ['PL'],
@@ -70,64 +71,51 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
   };
 })
 
-exports.stripeWebhook = functions.region('europe-central2').https.onRequest(async (req, res) => {
+exports.stripeWebhook = functions.region('europe-central2').https.onRequest(async (request, response) => {
   const stripe = require("stripe")(functions.config().stripe.secret_key);
-  let event;
-
-  // const parseMetadata = (metadataString) => {
-  //   const items = metadataString.split(';');
-  //   const arr = items.map(item => {
-  //     const splitted = item.split(",");
-  //     if(splitted[0] && splitted[1] && splitted[2]) {
-  //       return {
-  //         id: splitted[0],
-  //         size: splitted[1],
-  //         quantity: splitted[2]
-  //       }
-  //     } else return;
-  //   })
-
-  //   arr.pop();
-  //   return arr;
-  // }
+  let event = request.body;
 
   try {
     const webhookSecret = functions.config().stripe.webhook_secret_key;
 
     event = stripe.webhooks.constructEvent(
-      req.rawBody,
-      req.headers["stripe-signature"],
+      request.rawBody,
+      request.headers["stripe-signature"],
       webhookSecret,
     );
   } catch(error) {
     console.error("Webhook signature verification failed.", error.message);
-    return res.sendStatus(400);
+    return response.sendStatus(400);
   }
 
   switch(event.type) {
     case 'payment_intent.succeeded': {
-      // const paymentIntent = event.data.object;
-      console.log('payment success');
+      try {
+        const cartItems = JSON.parse(event.data.object.metadata.cart_info);
 
-      // const cartItems = parseMetadata(paymentIntent.metadata.cart_info);
+        for(const item of cartItems){
+          const docRef = admin.firestore().collection("products").doc(String(item.id));
+          const docSnapshot = await docRef.get();
+          const data = docSnapshot.data();
 
-      // console.log(cartItems)
-      // const db = admin.firestore();
-      // const batch = db.batch();
+          if (data.inStock && data.inStock[String(item.size)]) {
+            const newInStockValue = data.inStock[String(item.size)] - item.quantity; 
+            await docRef.update({
+              [`inStock.${item.size}`]: newInStockValue
+            });
+          }
+        }
 
-      // for (const cartItem of cartItems) {
-      //   const productRef = db.collection('products').doc(cartItem.id);
-      //   batch.update(productRef, {
-      //     [`inStock.${cartItem.size}`]: admin.firestore.FieldValue.increment(-cartItem.quantity),
-      //   });
-      // }
+        response.sendStatus(200);
+      } catch(error) {
+        console.error("payment_intent.succeeded error", error.massage);
+        response.sendStatus(400);
+      }
 
-      // await batch.commit();
-
-      res.sendStatus(200);
       break;
     }
     default:
       console.log(`Unhandled event type ${event.type}.`);
   }
+  response.sendStatus(200);
 })
