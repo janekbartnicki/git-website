@@ -211,7 +211,7 @@ const ProductDetails: React.FC = () => {
                             <Slider className='mx-5 my-2 rounded-lg'>
                                 <Slide index={0}><img className='w-auto h-auto m-auto' src={photos && photos[0] ? photos[0] : '/images/icon_logo.png'} alt="" /></Slide>
                                 <Slide index={1}><img className='w-auto h-auto m-auto' src={photos && photos[1] ? photos[1] : '/images/icon_logo.png'} alt="" /></Slide>
-                                <Slide index={2}><img className='w-auto h-auto m-auto' src={photos && photos[3] ? photos[2] : '/images/icon_logo.png'} alt="" /></Slide>
+                                <Slide index={2}><img className='w-auto h-auto m-auto' src={photos && photos[2] ? photos[2] : '/images/icon_logo.png'} alt="" /></Slide>
                             </Slider> : <div className='flex justify-center items-center align-middle'>
                                 <span className="loading loading-spinner loading-lg text-center my-52"></span></div>
                         }

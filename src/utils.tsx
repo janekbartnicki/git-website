@@ -119,7 +119,7 @@ export const AutoScroll: React.FC = () => {
 const mainImages = await fetchImages('/images/main_images');
 //320x240 scale for card image
 //515x523 scale for product details images
-console.log(mainImages)
+// console.log(mainImages)
 
 export const renderProductsCards = (products: Product[], limit?: number): JSX.Element[] => {
     const productsArray: JSX.Element[] = [];

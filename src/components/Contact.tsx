@@ -22,7 +22,6 @@ const Contact: React.FC = () => {
         const fetchPdf = async (): Promise<void> => {
             try {
                 const url = await getDownloadURL(ref(storage, 'regulamin.pdf'));
-                console.log(url)
                 setRulesPdfUrl(url);
             } catch(error) {
                 console.error(error);

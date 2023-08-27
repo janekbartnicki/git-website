@@ -17,8 +17,8 @@ const Home: React.FC = () => {
                 <Banner/>
             </div>
             <ShortAbout/>
-            <h1 className='text-center font-bold text-2xl'>Wybrane produkty</h1>
-            <div className='lg:m-20 flex flex-wrap gap-10'>
+            <h1 className='text-center my-0 text-4xl'>Wybrane produkty</h1>
+            <div className='lg:m-20 my-10 flex flex-wrap gap-10'>
                 {renderProductsCards(products, 4)}
             </div>
             

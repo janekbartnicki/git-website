@@ -8,7 +8,7 @@ const ShortAbout: React.FC = () => {
             {/* TODO: ogarnąć skalowanie się tekstu */}
             <div className="lg:md:m-10 m-3 lg:md:my-10 my-10 max-w-3xl">
                 <h1 className="font-bold text-5xl">Marka stworzona przez Marcina Feć</h1><br/>
-                <p className="text-2xl">Marka GiT została stworzona przez wieloletniego zawodnika oraz trenera <b>Marcina Feć</b>. Grał on w takich klubach jak <b>Odra Opole</b> czy <b>Piast Gliwice</b>. Aktualnie prowadzi własną szkółkę bramkarską oraz zasila sztab szkoleniowy pierwszoligowej OKS Odry Opole jako trener bramkarzy.<br/><br/>W oparciu o doświadczenia między słupkami zaprojketował on serię <b>najwyższej jakości</b> rękawic bramkarskich. Oprócz znakomitych osiągów produkt cechuje także świetny wygląd i ergonomia.</p>
+                <p className="text-2xl">Marka GiT została stworzona przez wieloletniego zawodnika oraz trenera <b>Marcina Feć</b>. Grał on w takich klubach jak <b>Odra Opole</b> czy <b>Piast Gliwice</b>. Aktualnie prowadzi własną szkółkę bramkarską oraz zasila sztab szkoleniowy pierwszoligowej OKS Odry Opole jako trener bramkarzy.<br/><br/>W oparciu o doświadczenia między słupkami zaprojektował on serię <b>najwyższej jakości</b> rękawic bramkarskich. Oprócz znakomitych osiągów produkt cechuje także świetny wygląd i ergonomia.</p>
                 <div className='hidden xl:block'>
                     <div className='flex justify-center my-24'>
                         <Link to='/sklep'>

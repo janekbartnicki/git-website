@@ -15,7 +15,7 @@ const images = await fetchImages('/images/main_images');
 
 const functions = getFunctions(app, 'europe-central2');
 const createStripeCheckout = httpsCallable(functions, 'createStripeCheckout');
-const stripePromise = loadStripe('pk_test_51NY55lAAC5bkRmwWvGC7xMRIi9GGTD4Rjyx9xPOMeDhmmnPG9uJ79MDBrdCmFxUo0XcR7sLLmcincoaRLFIFqDRn00Bzx0JShe');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 // interface ShippingInfo {
 //     city: string;
@@ -58,7 +58,7 @@ const Cart: React.FC = () => {
     const handleCheckout = async () => {
         if(!cartState.length) return;
         if(!(await stockDoubleCheck(cartState))) {
-            setErrorMessage('Brak produktu na stanie magazynowym. Wyczyść koszyk i spróbuj jeszcze raz.');
+            setErrorMessage('Brak produktu na stanie magazynowym. Wyczyść koszyk, przeładuj stronę i spróbuj jeszcze raz.');
             setError(true);
             return;
         }

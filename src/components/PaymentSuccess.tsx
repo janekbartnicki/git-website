@@ -9,6 +9,13 @@ const PaymentSuccess: React.FC = () => {
             <h3 className="text-2xl text-center">Operacja płatności zakończyła się sukcesem.</h3>
             <BsFillCartCheckFill className="w-24 h-24"/>
             <Link to='/'><button className="btn bg-[#3d61aa] text-white hover:text-black">Strona główna</button></Link>
+            <div className='flex justify-center mx-5'>
+                <ul className="steps">
+                    <li className="step step-neutral">Wybierz Produkty</li>
+                    <li className="step step-neutral">Płatność</li>
+                    <li className="step step-neutral">Przyjęcie Zamówienia</li>
+                </ul>
+            </div>
         </div>
     )
 }
