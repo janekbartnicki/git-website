@@ -2,27 +2,20 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../firebase";
 import { AiOutlineFilePdf, AiOutlineMail } from 'react-icons/ai';
 import { TiSocialInstagram } from "react-icons/ti";
-import { Document, Page } from "react-pdf";
 import { useEffect, useState } from "react";
-import { pdfjs } from 'react-pdf';
-import 'react-pdf/dist/Page/TextLayer.css';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
-).toString();
 
 const Contact: React.FC = () => {
     const [rulesPdfUrl, setRulesPdfUrl] = useState<string>('');
-    const [numPages, setNumPages] = useState<number>();
-    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [rodoPdfUrl, setRodoPdfUrl] = useState<string>('');
 
     useEffect(() => {
         const fetchPdf = async (): Promise<void> => {
             try {
-                const url = await getDownloadURL(ref(storage, 'regulamin.pdf'));
-                setRulesPdfUrl(url);
+                const rulesPdf = await getDownloadURL(ref(storage, 'regulamin.pdf'));
+                setRulesPdfUrl(rulesPdf);
+
+                const rodoPdf = await getDownloadURL(ref(storage, 'polityka_prywatnosci.pdf'));
+                setRodoPdfUrl(rodoPdf);
             } catch(error) {
                 console.error(error);
             }
@@ -31,29 +24,10 @@ const Contact: React.FC = () => {
         fetchPdf();
     }, [])
 
-    const onDocumentLoadSuccess = ({ numPages }: { numPages: number }): void => {
-        setNumPages(numPages);
-    }
-
-    const handlePreviousPage = () => {
-        if(pageNumber - 1 > 0) {
-            setPageNumber(pageNumber - 1);
-        }
-    }
-
-    const handleNextPage = () => {
-        if(numPages) {
-            if(pageNumber + 1 <= numPages) {
-                setPageNumber(pageNumber + 1);
-            }
-        }
-    }
-
     return (
         <>
             <h1 className="text-5xl text-center mt-10">Kontakt</h1>
             <div className="flex justify-center flex-wrap items-center gap-10 mt-16 mb-10">
-                <a href={rulesPdfUrl}><button className="btn">Regulamin Sklepu <AiOutlineFilePdf className="w-5 h-5"/></button></a>
                 <a href='mailto:szkolka.marcin.fec@interia.pl'><button className="btn">Kontakt Mailowy<AiOutlineMail className="w-5 h-5"/></button></a>
             </div>
             <p className="text-center mb-10">Aby dokonać zwrotu <a className="underline" href="mailto:szkolka.marcin.fec@interia.pl">wyślij wiadomość</a>.</p>    
@@ -67,21 +41,14 @@ const Contact: React.FC = () => {
                 </div>
             </div>
             <h1 className="text-5xl text-center mt-10">Regulamin</h1>
-            <div className="flex flex-row justify-center align-middle">
-                <div className="overflow-x-auto">
-                    {rulesPdfUrl ? 
-                        <Document file={rulesPdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
-                            <Page pageNumber={pageNumber} className='mb-0'/>
-                            <p className="text-center">Strona {pageNumber} z {numPages}</p>
-                            <div className="flex justify-center gap-10 m-5">
-                                <button onClick={handlePreviousPage} className="btn">Poprzednia</button>
-                                <button onClick={handleNextPage} className="btn">Następna</button>
-                            </div>
-                        </Document> :
-                        <span className="loading loading-spinner loading-md my-10"></span>
-                    }
-                </div>
+            <div className="flex justify-center flex-wrap items-center gap-10 mt-16 mb-10">
+                <a href={rulesPdfUrl}><button className="btn">Regulamin Sklepu <AiOutlineFilePdf className="w-5 h-5"/></button></a>
             </div>
+            <h1 className="text-5xl text-center mt-10">Polityka Prywatności</h1>
+            <div className="flex justify-center flex-wrap items-center gap-10 mt-16 mb-10">
+                <a href={rodoPdfUrl}><button className="btn">Polityka Prywatności <AiOutlineFilePdf className="w-5 h-5"/></button></a>
+            </div>
+            
         </>
     )
 }

@@ -1,15 +1,16 @@
 import { RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { CartProduct, clearCart, removeProduct } from '../store/slices/cartSlice';
-import ReactTextTransition, { presets } from 'react-text-transition';
+// import ReactTextTransition, { presets } from 'react-text-transition';
 import { GrNext } from 'react-icons/gr';
 import { Link } from 'react-router-dom';
 import { fetchImages, fetchProducts } from '../utils';
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { loadStripe } from '@stripe/stripe-js';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdLocalShipping } from 'react-icons/md'
 import { app } from '../firebase';
+import { FaFileInvoiceDollar } from 'react-icons/fa';
 
 const images = await fetchImages('/images/main_images');
 
@@ -45,15 +46,43 @@ const Cart: React.FC = () => {
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    // const [city, setCity] = useState<string>('');
-    // const [street, setStreet] = useState<string>('');
-    // const [houseNumber, setHouseNumber] = useState<string>('');
-    // const [apartmentNumber, setApartmentNumber] = useState<string>('');
-    // const [postalCode, setPostalCode] = useState<string>('');
+    const [rulesChecked, setRulesChecked] = useState<boolean>(false);
+    const [rodoChecked, setRodoChecked] = useState<boolean>(false);
+    const [isCompany, setIsCompany] = useState<boolean>(false);
+    const [nip, setNip] = useState<string>('');
+    const [companyName, setCompanyName]= useState<string>('');
+    const [companyAddress, setCompanyAddress]= useState<string>('');
+    const [companyPostalCode, setCompanyPostalCode]= useState<string>('');
+    const [companyCity, setCompanyCity]= useState<string>('');
+    const [companyEmail, setCompanyEmail]= useState<string>('');
+
+    const buyBtnRef = useRef<HTMLButtonElement>(null);
 
     const dispatch = useDispatch();
     let sum = 0;
     let amountOfItems = 0;
+
+    const handleRulesCheck = () => {
+        setRulesChecked(!rulesChecked);
+    }
+
+    const handleRodoCheck = () => {
+        setRodoChecked(!rodoChecked);
+    }
+
+    useEffect(() => {
+        if(buyBtnRef.current) {
+            buyBtnRef.current.disabled = true;
+        }
+    });
+
+    useEffect(() => {
+        if(rulesChecked && rodoChecked) {
+            if(buyBtnRef.current) {
+                buyBtnRef.current.disabled = false;
+            }
+        }
+    }, [rodoChecked, rulesChecked])
 
     const handleCheckout = async () => {
         if(!cartState.length) return;
@@ -74,7 +103,15 @@ const Cart: React.FC = () => {
 
         createStripeCheckout(
             {
-                cart: cartState
+                cart: cartState,
+                invoiceInfo: {
+                    nip: nip,
+                    companyName,
+                    companyAddress,
+                    companyPostalCode,
+                    companyCity,
+                    companyEmail
+                }
             }
         )
             .then((response: any) => {
@@ -155,68 +192,87 @@ const Cart: React.FC = () => {
             </div>
             {/* <div className="flex lg:md:justify-end justify-center lg:md:mx-40 lg:md:my-20"> */}
             <div className="flex lg:md:justify-between justify-center align-middle items-center lg:md:items-start my-10 lg:md:flex-row flex-col flex-wrap lg:md:mx-40 lg:md:my-20 gap-5">
-                <div className='lg:md:mx-10 mx-5 shadow-md p-5 rounded-2xl'>
-                    <h3 className='text-xl font-bold flex flex-nowrap align-middle justify-between items-center gap-1'>
-                        Ważna informacja
-                        <MdLocalShipping className="w-6 h-6 mt-1"/>
-                    </h3>
-                    <div className="form-control lg:md:w-96 w-full">
-                        <p>
-                            <br/>
-                            Koszt wysyłki wynosi <b>15 zł</b>.<br/>
-                            <span className='text-slate-400'>Dane adresowe podawane są w procesie płatności po kliknięciu przycisku "przejdź do płatności".</span><br/><br/>
-                            Jeżeli posiadasz <b>kod promocyjny</b> będzie on możliwy do wprowadzenia po kliknięciu przycisku "przejdź do płatonści".
-                        </p>
-                        {/* <label className="label">
-                            <span className="label-text">Miasto</span>
-                        </label>
-                        <input type="text"
-                            placeholder="Wprowadź nazwę miasta..."
-                            className="input input-bordered"
-                            onChange={e => setCity(e.target.value)}
-                            value={city}
-                            required
-                        />
-                        <label className="label">
-                            <span className="label-text">Ulica</span>
-                        </label>
-                        <input 
-                            type="text"
-                            placeholder="Wprowadź nazwę ulicy..."
-                            className="input input-bordered"
-                            onChange={e => setStreet(e.target.value)}
-                            value={street}
-                            required
-                        />
-                        <label className="label">
-                            <span className="label-text">Numer domu</span>
-                        </label>
-                        <input type="text"
-                            placeholder="Wprowadź numer domu..."
-                            className="input input-bordered"
-                            onChange={e => setHouseNumber(e.target.value)}
-                            value={houseNumber}
-                            required
-                        />
-                        <label className="label">
-                            <span className="label-text">Numer mieszkania *</span>
-                        </label>
-                        <input type="text"
-                            placeholder="Wprowadź numer mieszkania..."
-                            className="input input-bordered"
-                            onChange={e => setApartmentNumber(e.target.value)}
-                            value={apartmentNumber}
-                        />
-                        <label className="label">
-                            <span className="label-text">Kod pocztowy</span>
-                        </label>
-                        <input type="text"
-                            placeholder="Wprowadź kod pocztowy... (xx-xxx)" 
-                            className="input input-bordered"
-                            onChange={e => setPostalCode(e.target.value)}
-                            value={postalCode}
-                        />
-                        <p className="text-slate-400 my-5 text-right">* jeżeli dotyczy</p> */}
+                <div>
+                    <div className='lg:md:mx-10 mx-5 shadow-md p-5 rounded-2xl'>
+                        <h3 className='text-xl font-bold flex flex-nowrap align-middle justify-between items-center gap-1'>
+                            Kupujesz jako
+                            <FaFileInvoiceDollar className="w-5 h-5 mt-1"/>
+                        </h3><br/>
+                        <select className="select select-bordered w-full max-w-xs" onChange={() => setIsCompany(!isCompany)}>
+                            <option defaultChecked >Osoba prywatna</option>
+                            <option>Firma</option>
+                        </select>
+                        <div hidden={!isCompany}>
+                            <label className="label">
+                                <span className="label-text">NIP</span>
+                            </label>
+                            <input type="text"
+                                placeholder="NIP"
+                                className="input input-bordered"
+                                value={nip}
+                                onChange={e => setNip(e.target.value)}
+                            />
+                            <label className="label">
+                                <span className="label-text">Nazwa firmy</span>
+                            </label>
+                            <input type="text"
+                                placeholder="Nazwa firmy"
+                                className="input input-bordered"
+                                value={companyName}
+                                onChange={e => setCompanyName(e.target.value)}
+                            />
+                            <label className="label">
+                                <span className="label-text">Ulica i numer</span>
+                            </label>
+                            <input type="text"
+                                placeholder="Ulica i numer"
+                                className="input input-bordered"
+                                value={companyAddress}
+                                onChange={e => setCompanyAddress(e.target.value)}
+                            />
+                            <label className="label">
+                                <span className="label-text">Kod pocztowy</span>
+                            </label>
+                            <input type="text"
+                                placeholder="Kod pocztowy (xx-xxx)"
+                                className="input input-bordered"
+                                value={companyPostalCode}
+                                onChange={e => setCompanyPostalCode(e.target.value)}
+                            />
+                            <label className="label">
+                                <span className="label-text">Miejscowość</span>
+                            </label>
+                            <input type="text"
+                                placeholder="Miejscowość"
+                                className="input input-bordered"
+                                value={companyCity}
+                                onChange={e => setCompanyCity(e.target.value)}
+                            />
+                            <label className="label">
+                                <span className="label-text">Adres e-mail *</span>
+                            </label>
+                            <input type="email"
+                                placeholder="Adres e-mail"
+                                className="input input-bordered"
+                                value={companyEmail}
+                                onChange={e => setCompanyEmail(e.target.value)}
+                            /><br/><br/>
+                            <p className='text-slate-500'>* Faktura zostanie wysłana na adres e-mail <br/>&nbsp; po zaksięgowaniu płatności.</p>
+                        </div>
+                    </div>
+                    <div className='lg:md:mx-10 mx-5 shadow-md p-5 rounded-2xl mt-5'>
+                        <h3 className='text-xl font-bold flex flex-nowrap align-middle justify-between items-center gap-1'>
+                            Ważna informacja
+                            <MdLocalShipping className="w-6 h-6 mt-1"/>
+                        </h3>
+                        <div className="form-control lg:md:w-96 w-full">
+                            <p>
+                                <br/>
+                                Koszt wysyłki wynosi <b>15 zł</b>.<br/>
+                                <span className='text-slate-400'>Dane adresowe podawane są w procesie płatności po kliknięciu przycisku "przejdź do płatności".</span><br/><br/>
+                                Jeżeli posiadasz <b>kod promocyjny</b> będzie on możliwy do wprowadzenia po kliknięciu przycisku "przejdź do płatonści".
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div className='flex flex-col gap-5 w-56'>
@@ -224,13 +280,17 @@ const Cart: React.FC = () => {
                         <div className="stat overflow-hidden">
                             <div className="stat-title">Łączna kwota:</div>
                             <div className="stat-value">
-                                <ReactTextTransition springConfig={presets.wobbly}>{sum} PLN</ReactTextTransition>
+                                {/* <ReactTextTransition springConfig={presets.wobbly}>{sum} PLN</ReactTextTransition> */}
+                                {sum} PLN
                             </div>
                             <div className="stat-desc">za {amountOfItems} szt.</div>
                             <div className='stat-desc'>+ 15 zł wysyłka</div>
                         </div>
                     </div>
+                    <p className='flex text-sm'><input type="checkbox" checked={rulesChecked} onChange={handleRulesCheck}/>&nbsp;<span>Akceptuję <Link to='/kontakt' className='underline'>politykę prywatności.</Link></span></p>
+                    <p className='flex text-sm'><input type="checkbox" checked={rodoChecked} onChange={handleRodoCheck}/>&nbsp;<span>Akceptuję <Link to='/kontakt' className='underline'>regulamin sklepu.</Link></span></p>
                     <button 
+                        ref={buyBtnRef}
                         className='btn text-white hover:text-black bg-[#3d61aa] group'
                         onClick={handleCheckout}
                         >

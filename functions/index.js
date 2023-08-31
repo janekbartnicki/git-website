@@ -27,15 +27,27 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["p24", "card"],
     mode: "payment",
-    success_url: "http://localhost:5173/platnosc/sukces",
-    cancel_url: "http://localhost:5173/platnosc/niepowodzenie",
+    success_url: "https://git-store.pl/platnosc/sukces",
+    cancel_url: "https://git-store.pl/platnosc/niepowodzenie",
     line_items: cartItems,
     metadata: {
       cart_info: METADATA_CART_STRING,
+      nip: data.invoiceInfo.nip,
+      companyName: data.invoiceInfo.companyName,
+      companyAddress: data.invoiceInfo.companyAddress,
+      companyPostalCode: data.invoiceInfo.companyPostalCode,
+      companyCity: data.invoiceInfo.companyCity,
+      companyEmail: data.invoiceInfo.companyEmail,
     },
     payment_intent_data: {
       metadata: {
         cart_info: METADATA_CART_STRING,
+        nip: data.invoiceInfo.nip,
+        companyName: data.invoiceInfo.companyName,
+        companyAddress: data.invoiceInfo.companyAddress,
+        companyPostalCode: data.invoiceInfo.companyPostalCode,
+        companyCity: data.invoiceInfo.companyCity,
+        companyEmail: data.invoiceInfo.companyEmail,
       },
     },
     shipping_address_collection: {
@@ -99,11 +111,15 @@ exports.stripeWebhook = functions.region('europe-central2').https.onRequest(asyn
           const data = docSnapshot.data();
 
           if (data.inStock && data.inStock[String(item.size)]) {
-            const newInStockValue = data.inStock[String(item.size)] - item.quantity; 
-            await docRef.update({
-              [`inStock.${item.size}`]: newInStockValue
-            });
-          }
+            try {
+              const newInStockValue = data.inStock[String(item.size)] - item.quantity; 
+              await docRef.update({
+                [`inStock.${item.size}`]: newInStockValue
+              });
+            } catch(error) {
+              response.sendStatus(400);
+            }
+          } else response.sendStatus(400);
         }
 
         response.sendStatus(200);
