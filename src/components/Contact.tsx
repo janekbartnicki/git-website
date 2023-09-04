@@ -40,15 +40,11 @@ const Contact: React.FC = () => {
                 <a href='https://www.facebook.com/SzkolkaBramkarskaMFec'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className="fill-current"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path></svg></a>
                 </div>
             </div>
-            <h1 className="text-5xl text-center mt-10">Regulamin</h1>
-            <div className="flex justify-center flex-wrap items-center gap-10 mt-16 mb-10">
+            <h1 className="text-4xl text-center mt-10">Regulamin & <br/> Polityka Prywatności</h1>
+            <div className="flex justify-center flex-wrap items-center gap-10 mt-16 mb-16">
                 <a href={rulesPdfUrl}><button className="btn">Regulamin Sklepu <AiOutlineFilePdf className="w-5 h-5"/></button></a>
-            </div>
-            <h1 className="text-5xl text-center mt-10">Polityka Prywatności</h1>
-            <div className="flex justify-center flex-wrap items-center gap-10 mt-16 mb-10">
                 <a href={rodoPdfUrl}><button className="btn">Polityka Prywatności <AiOutlineFilePdf className="w-5 h-5"/></button></a>
-            </div>
-            
+            </div>          
         </>
     )
 }

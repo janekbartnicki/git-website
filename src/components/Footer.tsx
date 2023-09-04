@@ -14,8 +14,8 @@ const Footer: React.FC = () => {
                 {/* <p>Copyright © 2023 - All right reserved</p> */}<br/>
                 <p>NIP: 754 251 88 08</p>
                 <p>GiT Marcin Feć ul. Emila Fieldorfa 8C/602, 45-273 Opole</p>
-                <Link to='/kontakt' className='hover:underline hover:cursor-pointer'>Regulamin sklepu</Link>
-                <Link to='/kontakt' className='hover:underline hover:cursor-pointer'>Polityka Prywatności</Link>
+                <Link to='/kontakt' className='hover:cursor-pointer underline'>Regulamin sklepu</Link>
+                <Link to='/kontakt' className='hover:cursor-pointer underline'>Polityka Prywatności</Link>
             </div> 
             <div>
                 <div className="grid grid-flow-col gap-4">

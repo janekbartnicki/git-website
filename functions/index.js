@@ -25,7 +25,7 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
   })
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["p24", "card"],
+    payment_method_types: ["blik", "card"],
     mode: "payment",
     success_url: "https://git-store.pl/platnosc/sukces",
     cancel_url: "https://git-store.pl/platnosc/niepowodzenie",

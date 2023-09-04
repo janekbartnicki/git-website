@@ -8,7 +8,7 @@ import { fetchImages, fetchProducts } from '../utils';
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useRef, useState } from 'react';
-import { MdLocalShipping } from 'react-icons/md'
+import { MdDiscount } from 'react-icons/md'
 import { app } from '../firebase';
 import { FaFileInvoiceDollar } from 'react-icons/fa';
 
@@ -74,14 +74,14 @@ const Cart: React.FC = () => {
         if(buyBtnRef.current) {
             buyBtnRef.current.disabled = true;
         }
-    });
+    }, []);
 
     useEffect(() => {
         if(rulesChecked && rodoChecked) {
             if(buyBtnRef.current) {
                 buyBtnRef.current.disabled = false;
             }
-        }
+        } else if(buyBtnRef.current) buyBtnRef.current.disabled = true;
     }, [rodoChecked, rulesChecked])
 
     const handleCheckout = async () => {
@@ -263,13 +263,14 @@ const Cart: React.FC = () => {
                     <div className='lg:md:mx-10 mx-5 shadow-md p-5 rounded-2xl mt-5'>
                         <h3 className='text-xl font-bold flex flex-nowrap align-middle justify-between items-center gap-1'>
                             Ważna informacja
-                            <MdLocalShipping className="w-6 h-6 mt-1"/>
+                            <MdDiscount className="w-6 h-6 mt-1"/>
                         </h3>
                         <div className="form-control lg:md:w-96 w-full">
                             <p>
                                 <br/>
-                                Koszt wysyłki wynosi <b>15 zł</b>.<br/>
-                                <span className='text-slate-400'>Dane adresowe podawane są w procesie płatności po kliknięciu przycisku "przejdź do płatności".</span><br/><br/>
+                                {/* Koszt wysyłki wynosi <b>15 zł</b>.<br/>
+                                Możliwy jest także darmowy odbiór osobisty na ul. Emila Fieldorfa 8C/602, 45-273 Opole.<br/>
+                                <span className='text-slate-400'>Dane adresowe podawane są w procesie płatności po kliknięciu przycisku "przejdź do płatności".</span><br/><br/> */}
                                 Jeżeli posiadasz <b>kod promocyjny</b> będzie on możliwy do wprowadzenia po kliknięciu przycisku "przejdź do płatonści".
                             </p>
                         </div>
@@ -284,7 +285,7 @@ const Cart: React.FC = () => {
                                 {sum} PLN
                             </div>
                             <div className="stat-desc">za {amountOfItems} szt.</div>
-                            <div className='stat-desc'>+ 15 zł wysyłka</div>
+                            <div className='stat-desc'>+ wysyłka 15 zł</div>
                         </div>
                     </div>
                     <p className='flex text-sm'><input type="checkbox" checked={rulesChecked} onChange={handleRulesCheck}/>&nbsp;<span>Akceptuję <Link to='/kontakt' className='underline'>politykę prywatności.</Link></span></p>
