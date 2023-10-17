@@ -2,6 +2,7 @@
 
 Online shop for goalkeeper gloves company. 🧤 ⚽
 
+<a href="www.git-store.pl">git-store.pl</a>
 
 ## Tech Stack
 
@@ -12,4 +13,4 @@ Online shop for goalkeeper gloves company. 🧤 ⚽
 - <p style="display: flex; gap: .5em; ">Tailwind CSS <img src="https://tailwindcss.com/_next/static/media/tailwindcss-mark.79614a5f61617ba49a0891494521226b.svg" width="20"></p>
 - <p style="display: flex; gap: .5em; ">DaisyUI <img src="https://raw.githubusercontent.com/saadeghi/files/main/daisyui/logo-4.svg" width="20"></p>
 - <p style="display: flex; gap: .5em; ">Firebase <img src="https://www.vectorlogo.zone/logos/firebase/firebase-ar21.svg" width="20"></p>
-- <p style="display: flex; gap: .5em; ">Stripe (soon) <img src="https://www.vectorlogo.zone/logos/stripe/stripe-ar21.svg" width="20"></p>
+- <p style="display: flex; gap: .5em; ">Stripe API <img src="https://www.vectorlogo.zone/logos/stripe/stripe-ar21.svg" width="20"></p>

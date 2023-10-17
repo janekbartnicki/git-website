@@ -25,11 +25,14 @@ exports.createStripeCheckout = functions.region('europe-central2').https.onCall(
   })
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["blik", "card"],
+    payment_method_types: ["p24", "card"],
     mode: "payment",
     success_url: "https://git-store.pl/platnosc/sukces",
     cancel_url: "https://git-store.pl/platnosc/niepowodzenie",
     line_items: cartItems,
+    phone_number_collection: {
+      enabled: true,
+    },
     metadata: {
       cart_info: METADATA_CART_STRING,
       nip: data.invoiceInfo.nip,

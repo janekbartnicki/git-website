@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { fetchImages, fetchProducts } from '../utils';
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { loadStripe } from '@stripe/stripe-js';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import { MdDiscount } from 'react-icons/md'
 import { app } from '../firebase';
 import { FaFileInvoiceDollar } from 'react-icons/fa';
@@ -41,20 +41,79 @@ const stockDoubleCheck = async (cartProducts: CartProduct[]): Promise<boolean> =
     return true; 
 }
 
+interface InvoiceInfo {
+    nip: string,
+    companyName: string,
+    companyAddress: string,
+    companyPostalCode: string,
+    companyCity: string,
+    companyEmail: string
+}
+
+const reducer = (state: InvoiceInfo, action: {type: string, payload: string}): InvoiceInfo => {
+    switch(action.type) {
+        case 'SET_NIP': {
+            return {
+                ...state,
+                nip: action.payload
+            }
+        }
+        case 'SET_NAME': {
+            return  {
+                ...state,
+                companyName: action.payload
+            }
+        }
+        case 'SET_ADDRESS': {
+            return  {
+                ...state,
+                companyAddress: action.payload
+            }
+        }
+        case 'SET_POSTALCODE': {
+            return  {
+                ...state,
+                companyPostalCode: action.payload
+            }
+        }
+        case 'SET_CITY': {
+            return  {
+                ...state,
+                companyCity: action.payload
+            }
+        }
+        case 'SET_EMAIL': {
+            return  {
+                ...state,
+                companyEmail: action.payload
+            }
+        }
+        default: {
+            return state;
+        }
+    }
+}
+
 const Cart: React.FC = () => {
     const cartState = useSelector<RootState, CartProduct[]>(state => state.cart);
+    
+    const invoiceInitialState = {
+        nip: '',
+        companyName: '',
+        companyAddress: '',
+        companyPostalCode: '',
+        companyCity: '',
+        companyEmail: ''
+    }
+
+    const [comapnyState, comapnyDispatch] = useReducer(reducer, invoiceInitialState)
+    
     const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [rulesChecked, setRulesChecked] = useState<boolean>(false);
     const [rodoChecked, setRodoChecked] = useState<boolean>(false);
     const [isCompany, setIsCompany] = useState<boolean>(false);
-    const [nip, setNip] = useState<string>('');
-    const [companyName, setCompanyName]= useState<string>('');
-    const [companyAddress, setCompanyAddress]= useState<string>('');
-    const [companyPostalCode, setCompanyPostalCode]= useState<string>('');
-    const [companyCity, setCompanyCity]= useState<string>('');
-    const [companyEmail, setCompanyEmail]= useState<string>('');
 
     const buyBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -105,12 +164,12 @@ const Cart: React.FC = () => {
             {
                 cart: cartState,
                 invoiceInfo: {
-                    nip: nip,
-                    companyName,
-                    companyAddress,
-                    companyPostalCode,
-                    companyCity,
-                    companyEmail
+                    nip: comapnyState.nip,
+                    companyName: comapnyState.companyName,
+                    companyAddress: comapnyState.companyAddress,
+                    companyPostalCode: comapnyState.companyPostalCode,
+                    companyCity: comapnyState.companyCity,
+                    companyEmail: comapnyState.companyEmail
                 }
             }
         )
@@ -209,8 +268,8 @@ const Cart: React.FC = () => {
                             <input type="text"
                                 placeholder="NIP"
                                 className="input input-bordered"
-                                value={nip}
-                                onChange={e => setNip(e.target.value)}
+                                value={comapnyState.nip}
+                                onChange={e => comapnyDispatch({type: 'SET_NIP', payload: e.target.value})}
                             />
                             <label className="label">
                                 <span className="label-text">Nazwa firmy</span>
@@ -218,8 +277,8 @@ const Cart: React.FC = () => {
                             <input type="text"
                                 placeholder="Nazwa firmy"
                                 className="input input-bordered"
-                                value={companyName}
-                                onChange={e => setCompanyName(e.target.value)}
+                                value={comapnyState.companyName}
+                                onChange={e => comapnyDispatch({type: 'SET_NAME', payload: e.target.value})}
                             />
                             <label className="label">
                                 <span className="label-text">Ulica i numer</span>
@@ -227,8 +286,8 @@ const Cart: React.FC = () => {
                             <input type="text"
                                 placeholder="Ulica i numer"
                                 className="input input-bordered"
-                                value={companyAddress}
-                                onChange={e => setCompanyAddress(e.target.value)}
+                                value={comapnyState.companyAddress}
+                                onChange={e => comapnyDispatch({type: 'SET_ADDRESS', payload: e.target.value})}
                             />
                             <label className="label">
                                 <span className="label-text">Kod pocztowy</span>
@@ -236,8 +295,8 @@ const Cart: React.FC = () => {
                             <input type="text"
                                 placeholder="Kod pocztowy (xx-xxx)"
                                 className="input input-bordered"
-                                value={companyPostalCode}
-                                onChange={e => setCompanyPostalCode(e.target.value)}
+                                value={comapnyState.companyPostalCode}
+                                onChange={e => comapnyDispatch({type: 'SET_POSTALCODE', payload: e.target.value})}
                             />
                             <label className="label">
                                 <span className="label-text">Miejscowość</span>
@@ -245,8 +304,8 @@ const Cart: React.FC = () => {
                             <input type="text"
                                 placeholder="Miejscowość"
                                 className="input input-bordered"
-                                value={companyCity}
-                                onChange={e => setCompanyCity(e.target.value)}
+                                value={comapnyState.companyCity}
+                                onChange={e => comapnyDispatch({type: 'SET_CITY', payload: e.target.value})}
                             />
                             <label className="label">
                                 <span className="label-text">Adres e-mail *</span>
@@ -254,8 +313,8 @@ const Cart: React.FC = () => {
                             <input type="email"
                                 placeholder="Adres e-mail"
                                 className="input input-bordered"
-                                value={companyEmail}
-                                onChange={e => setCompanyEmail(e.target.value)}
+                                value={comapnyState.companyEmail}
+                                onChange={e => comapnyDispatch({type: 'SET_EMAIL', payload: e.target.value})}
                             /><br/><br/>
                             <p className='text-slate-500'>* Faktura zostanie wysłana na adres e-mail <br/>&nbsp; po zaksięgowaniu płatności.</p>
                         </div>
