@@ -7,9 +7,10 @@ interface CardProps {
     isNew?: boolean;
     link?: string;
     altImg: string;
+    buttonPlaceholder?: string;
 }
 
-const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, isNew, altImg, link = '#'}) => {
+const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, isNew, altImg, link = '#', buttonPlaceholder = 'WIĘCEJ'}) => {
 
     const renderBadge = (): JSX.Element | null => {
         if(isNew) {
@@ -30,7 +31,7 @@ const Card: React.FC<CardProps> = ({header, img = 'images/icon_logo.png', desc, 
                 </h2>
                 <p className="text-gray-500 mb-5">{desc}</p>
                 <div className="card-actions justify-end">
-                    <button className="btn bg-[#e83b3b] text-white hover:text-black ">WIĘCEJ</button>
+                    <button className="btn bg-[#e83b3b] text-white hover:text-black ">{buttonPlaceholder}</button>
                 </div>
             </div>
         </Link>

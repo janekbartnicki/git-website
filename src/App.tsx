@@ -23,6 +23,7 @@ import { fetchProductsData } from './store/slices/productsSlice';
 import Loading from './components/Loading';
 import PaymentSuccess from './components/PaymentSuccess';
 import PaymentFail from './components/PaymentFail';
+import Plans from './components/Plans';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -56,6 +57,7 @@ const App = () => {
         <Route path='/sklep' element={<Shop/>}/>
         <Route path='/sklep/produkt/:id' element={<ProductDetails/>}/>
         <Route path='/koszyk' element={<Cart/>}/>
+        <Route path='/plany' element={<Plans/>}/>
         <Route path='/logowanie' element={<SignIn/>}/>
         <Route path='/rejestracja' element={<SignUp/>}/>
         <Route path='/zarejestrowano' element={<RegisteredPage/>}/>

@@ -43,6 +43,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                     <ul tabIndex={0} className="menu z-10 menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-30">
                         <li><Link to='/' onClick={hideDropdown}>Strona Główna</Link></li>
                         <li><Link to='/sklep' onClick={hideDropdown}>Sklep</Link></li>
+                        <li><Link to='/plany' onClick={hideDropdown}>Plany Treningowe</Link></li>
                         {/* <li>
                         <a>Parent</a>
                         <ul className="p-2">
@@ -68,6 +69,7 @@ const NavBar: React.FC<NavBarProps> = props => {
                 <ul className="menu menu-horizontal px-1 text-xl justify-around">
                     <li><Link to='/' onClick={hideDropdown}>Strona Główna</Link></li>
                     <li><Link to='/sklep' onClick={hideDropdown}>Sklep</Link></li>
+                    <li><Link to='/plany' onClick={hideDropdown}>Plany Treningowe</Link></li>
                     {/* <li tabIndex={0}>
                         <details>
                         <summary>Sklep</summary>

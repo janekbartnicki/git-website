@@ -116,9 +116,32 @@ export const AutoScroll: React.FC = () => {
     return null;
 }
 
+export interface Plan {
+    id: number;
+    longDesc: string;
+    shortDesc: string;
+    name: string;
+    price: number;
+}
+
+export const fetchPlans = async (): Promise<Plan[]> => {
+    const plans: Plan[] = [];
+    try {
+        const querySnapshot = await getDocs(collection(firestore, "plans"));
+
+        querySnapshot.forEach((doc) => {
+            plans.push(doc.data() as Plan);
+        });
+    
+        return plans;
+    } catch (error) {
+        throw new Error(`Failed to fetch plans. Error: ${error}`);
+    }
+}
+
 const mainImages = await fetchImages('/images/main_images');
 //320x240 scale for card image
-//515x523 scale for product details images
+//515x523 (600x610) scale for product details images
 // console.log(mainImages)
 
 export const renderProductsCards = (products: Product[], limit?: number): JSX.Element[] => {
