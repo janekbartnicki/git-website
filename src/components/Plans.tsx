@@ -1,7 +1,7 @@
 import { fetchImages, fetchPlans, Plan } from "../utils";
 import Card from "./Card";
 
-const mainImgUrl = await fetchImages('/images/plans/card_img.jpg') as string;
+const mainImgUrl = await fetchImages('/images/odra2.jpg') as string;
 const plans = await fetchPlans();
 
 const renderPlanCards = (plans: Plan[]): JSX.Element[] => {
@@ -11,7 +11,7 @@ const renderPlanCards = (plans: Plan[]): JSX.Element[] => {
         plansArray.push(
             <Card 
                 key={id} 
-                buttonPlaceholder={`${price} ZŁ`}
+                buttonPlaceholder={`CENA ${price} ZŁ`}
                 header={name}
                 desc={shortDesc}
                 img={mainImgUrl}
@@ -22,8 +22,6 @@ const renderPlanCards = (plans: Plan[]): JSX.Element[] => {
 
     return plansArray;
 }
-
-console.log(plans);
 
 const Plans: React.FC = () => {
 

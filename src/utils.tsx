@@ -124,7 +124,7 @@ export interface Plan {
     price: number;
 }
 
-export const fetchPlans = async (): Promise<Plan[]> => {
+export const fetchPlans = async (planId: (null | number) = null): Promise<Plan[]> => {
     const plans: Plan[] = [];
     try {
         const querySnapshot = await getDocs(collection(firestore, "plans"));
@@ -132,6 +132,11 @@ export const fetchPlans = async (): Promise<Plan[]> => {
         querySnapshot.forEach((doc) => {
             plans.push(doc.data() as Plan);
         });
+
+        if(planId) {
+            const plan = plans.find(plan => plan.id === planId) as Plan;
+            if(plan) return [plan];
+        }
     
         return plans;
     } catch (error) {
