@@ -16,6 +16,7 @@ const renderPlanCards = (plans: Plan[]): JSX.Element[] => {
                 desc={shortDesc}
                 img={mainImgUrl}
                 altImg="Plan treningowy"
+                link={`/plany/${id}`}
             />
         )
     }
@@ -28,6 +29,7 @@ const Plans: React.FC = () => {
 
     return (
         <>
+            <h1 className="text-center text-5xl mt-10">Plany Treningowe</h1>
             {renderPlanCards(plans)}
 
         </>
